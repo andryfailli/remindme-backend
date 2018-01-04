@@ -3,7 +3,10 @@ language: java
 addons:
   sonarcloud:
     organization: "andryfailli-github"
-      
+    token:
+      secure: $SONAR_TOKEN
+    github_token:
+      secure: $GITHUB_TOKEN
 jdk:
   - oraclejdk8
 
