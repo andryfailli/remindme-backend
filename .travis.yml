@@ -1,4 +1,27 @@
 language: java
 
+addons:
+  sonarcloud:
+    organization: "andryfailli-github"
+    token:
+      secure: $SONAR_TOKEN
+    github_token:
+      secure: $GITHUB_TOKEN
+    branches:
+      - master
+      - develop
+      - feature/*
+      - hotfix/*
+      - release/*
+    
+jdk:
+  - oraclejdk8
+
 script:
-- mvn clean verify
+  - mvn clean jacoco:prepare-agent test jacoco:prepare-agent-integration verify jacoco:report jacoco:report-integration sonar:sonar coveralls:report -DrepoToken=$COVERALLS_TOKEN
+
+  
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
