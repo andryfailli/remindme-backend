@@ -7,6 +7,9 @@ addons:
       secure: $SONAR_TOKEN
     github_token:
       secure: $GITHUB_TOKEN
+    branches:
+      - *
+    
 jdk:
   - oraclejdk8
 
