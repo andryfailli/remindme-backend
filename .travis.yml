@@ -1,5 +1,10 @@
 language: java
 
+sudo: required
+
+services:
+  - docker
+
 addons:
   sonarcloud:
     organization: "andryfailli-github"
@@ -18,7 +23,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - mvn clean jacoco:prepare-agent test jacoco:prepare-agent-integration verify jacoco:report jacoco:report-integration sonar:sonar coveralls:report -DrepoToken=$COVERALLS_TOKEN
+  - mvn clean jacoco:prepare-agent test jacoco:prepare-agent-integration verify package jacoco:report jacoco:report-integration sonar:sonar coveralls:report -DrepoToken=$COVERALLS_TOKEN
 
   
 cache:
