@@ -8,7 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>remindme-common</name>
+	<name>remindme-backend</name>
 	<description>Java API Backend for RemindMe!</description>
 	
 	<parent>
