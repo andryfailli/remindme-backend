@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RemindMeBackendApplicationTests {
+public class RemindMeApiApplicationTests {
 
 	@Test
 	public void contextLoads() {
