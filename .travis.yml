@@ -18,7 +18,8 @@ jdk:
   - oraclejdk8
 
 script:
-  - mvn clean verify org.jacoco:jacoco-maven-plugin:prepare-agent package jacoco:report coveralls:report sonar:sonar -DrepoToken=$COVERALLS_TOKEN
+  - mvn clean jacoco:prepare-agent test jacoco:prepare-agent-integration verify jacoco:report jacoco:report-integration sonar:sonar coveralls:report -DrepoToken=$COVERALLS_TOKEN
+
   
 cache:
   directories:
