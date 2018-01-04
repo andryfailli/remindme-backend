@@ -8,7 +8,9 @@ addons:
     github_token:
       secure: $GITHUB_TOKEN
     branches:
-      - *
+      - master
+      - develop
+      - feature/*
     
 jdk:
   - oraclejdk8
