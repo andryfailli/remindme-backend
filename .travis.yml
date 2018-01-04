@@ -8,7 +8,8 @@ jdk:
   - oraclejdk8
 
 script:
-  - mvn clean verify org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+  - mvn clean verify org.jacoco:jacoco-maven-plugin:prepare-agent package
+  - sonar-scanner
   
 cache:
   directories:
