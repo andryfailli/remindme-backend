@@ -11,6 +11,8 @@ addons:
       - master
       - develop
       - feature/*
+      - hotfix/*
+      - release/*
     
 jdk:
   - oraclejdk8
