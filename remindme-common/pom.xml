@@ -15,24 +15,25 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<springBoot.version>1.5.9.RELEASE</springBoot.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
-			<version>1.5.9.RELEASE</version>
+			<version>${springBoot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<version>1.5.9.RELEASE</version>
+			<version>${springBoot.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
-            <version>1.5.9.RELEASE</version>
+            <version>${springBoot.version}</version>
         </dependency>
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
@@ -52,6 +53,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${springBoot.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
