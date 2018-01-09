@@ -1,7 +1,6 @@
 package it.andreafailli.remindme.common.models;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,35 +17,35 @@ public class UserTest {
 	@Test
 	public void testConstructorNoArgs() {
 		BaseEntity entity = new User();
-		assertNull(entity.getId());
+		assertThat(entity.getId()).isNull();
 	}
 	
 	@Test
 	public void testConstructorWithId() {
 		String id = "id";
 		BaseEntity entity = new User(id);
-		assertEquals(id, entity.getId());
+		assertThat(entity.getId()).isEqualTo(id);
 	}
 	
 	@Test
 	public void testName() {
 		String value = "value";
 		this.u.setName(value);
-		assertEquals(value, this.u.getName());
+		assertThat(this.u.getName()).isEqualTo(value);
 	}
 	
 	@Test
 	public void testEmail() {
 		String value = "value";
 		this.u.setEmail(value);
-		assertEquals(value, this.u.getEmail());
+		assertThat(this.u.getEmail()).isEqualTo(value);
 	}
 	
 	@Test
 	public void testPhotoUrl() {
 		String value = "value";
 		this.u.setPhotoUrl(value);
-		assertEquals(value, this.u.getPhotoUrl());
+		assertThat(this.u.getPhotoUrl()).isEqualTo(value);
 	}
 	
 }

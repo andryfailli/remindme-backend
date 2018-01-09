@@ -1,12 +1,12 @@
 package it.andreafailli.remindme.common.services;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import org.apache.commons.collections.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -24,45 +24,63 @@ public class UserServiceTest {
     @Mock
     IUserRepository entityRepository;
     
-    List<User> entities;
+    User entity1;
     
-    User entity;
+    User entity2;
 
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         
-        this.entity = new User("1");
-        this.entities = Arrays.asList(this.entity, new User("2"));
+        this.entity1 = new User("1");
+        this.entity2 = new User("2");
     }
     
     @Test
 	public void testList() {
-		when(this.entityRepository.findAll()).thenReturn(this.entities);
-		assertEquals(this.entities, IteratorUtils.toList(this.entityService.list().iterator()));
+		when(this.entityRepository.findAll()).thenReturn(Arrays.asList(this.entity1, this.entity2));
+		assertThat(this.entityService.list()).containsExactly(this.entity1, this.entity2);
+		verify(this.entityRepository).findAll();
 	}
     
     @Test
+   	public void testListEmpty() {
+   		when(this.entityRepository.findAll()).thenReturn(new ArrayList<User>());
+   		assertThat(this.entityService.list()).isEmpty();
+   		verify(this.entityRepository).findAll();
+   	}
+    
+    @Test
    	public void testGet() {
-   		when(this.entityRepository.findOne(this.entity.getId())).thenReturn(this.entity);
-   		assertEquals(this.entity, this.entityService.get(this.entity.getId()));
+   		when(this.entityRepository.findOne(this.entity1.getId())).thenReturn(this.entity1);
+   		assertThat(this.entityService.get(this.entity1.getId())).isEqualTo(this.entity1);
+   		verify(this.entityRepository).findOne(this.entity1.getId());
+   	}
+    
+    @Test
+   	public void testGetNotFound() {
+   		assertThat(this.entityService.get(this.entity2.getId())).isNull();
+   		verify(this.entityRepository).findOne(this.entity2.getId());
    	}
     
     @Test
    	public void testInsert() {
-   		when(this.entityRepository.save(this.entity)).thenReturn(this.entity);
-   		assertEquals(this.entity, this.entityService.insert(this.entity));
+   		when(this.entityRepository.save(this.entity1)).thenReturn(this.entity1);
+   		assertThat(this.entityService.insert(this.entity1)).isEqualTo(this.entity1);
+   		verify(this.entityRepository).save(this.entity1);
    	}
     
     @Test
    	public void testUpdate() {
-   		when(this.entityRepository.save(this.entity)).thenReturn(this.entity);
-   		assertEquals(this.entity, this.entityService.update(this.entity));
+   		when(this.entityRepository.save(this.entity1)).thenReturn(this.entity1);
+   		assertThat(this.entityService.update(this.entity1)).isEqualTo(this.entity1);
+   		verify(this.entityRepository).save(this.entity1);
    	}
     
     @Test
    	public void testDelete() {
-    	this.entityService.delete(this.entity.getId());
+    	this.entityService.delete(this.entity1.getId());
+    	verify(this.entityRepository).delete(this.entity1.getId());
    	}
 
 }
