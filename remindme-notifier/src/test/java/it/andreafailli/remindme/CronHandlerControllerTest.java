@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import it.andreafailli.remindme.common.services.ReminderService;
 import it.andreafailli.remindme.notifier.controllers.CronHandlerController;
+import it.andreafailli.remindme.testing.UnitTestCategory;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = CronHandlerController.class)
+@Category(UnitTestCategory.class)
 public class CronHandlerControllerTest {
 	
 	@Autowired

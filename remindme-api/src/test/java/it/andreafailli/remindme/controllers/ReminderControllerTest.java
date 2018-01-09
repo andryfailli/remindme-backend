@@ -1,8 +1,10 @@
 package it.andreafailli.remindme.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -17,6 +19,7 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -34,9 +37,11 @@ import it.andreafailli.remindme.api.controllers.ReminderController;
 import it.andreafailli.remindme.common.models.Reminder;
 import it.andreafailli.remindme.common.models.User;
 import it.andreafailli.remindme.common.services.ReminderService;
+import it.andreafailli.remindme.testing.UnitTestCategory;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = ReminderController.class)
+@Category(UnitTestCategory.class)
 public class ReminderControllerTest {
 
 	@Autowired
