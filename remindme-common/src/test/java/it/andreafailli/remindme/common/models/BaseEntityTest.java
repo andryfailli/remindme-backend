@@ -1,8 +1,6 @@
 package it.andreafailli.remindme.common.models;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +19,9 @@ public class BaseEntityTest {
 		
 	}
 
-	private FakeEntity e1, e2;
+	private FakeEntity e1;
+	
+	private FakeEntity e2;
 	
 	@Before
 	public void setUp() {
@@ -34,33 +34,37 @@ public class BaseEntityTest {
 		String value = "value";
 		FakeEntity e = new FakeEntity();
 		e.setId(value);
-		assertEquals(value, e.getId());
+		assertThat(e.getId()).isEqualTo(value);
 	}
 	
 	@Test
 	public void testEquals() {
-		assertEquals(this.e1, this.e1);
-		assertEquals(this.e2, this.e2);
+		assertThat(this.e1).isEqualTo(this.e1);
 	}
 	
 	@Test
-	public void testNotEquals() {
-		assertNotEquals(this.e1, this.e2);
+	public void testEqualsDifferentEntities() {
+		assertThat(this.e1).isNotEqualTo(this.e2);
 	}
 	
 	@Test
-	public void testNotEqualsNull() {
-		assertNotEquals(this.e1, null);
+	public void testEqualsDifferentObjects() {
+		assertThat(this.e1).isNotEqualTo(new Object());
 	}
 	
 	@Test
-	public void testNotEqualsObject() {
-		assertNotEquals(this.e1, new Object());
+	public void testEqualsNull() {
+		assertThat(this.e1).isNotEqualTo(null);
 	}
 	
 	@Test
-	public void testToString() {
-		assertNotNull(this.e1.toString());
+	public void testToStringNotNull() {
+		assertThat(this.e1.toString()).isNotNull();
+	}
+	
+	@Test
+	public void testToStringNotEmpty() {
+		assertThat(this.e1.toString()).isNotEmpty();
 	}
 	
 }
