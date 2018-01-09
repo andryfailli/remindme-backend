@@ -48,6 +48,26 @@ public class BaseEntityTest {
 	}
 	
 	@Test
+	public void testEqualsEntityVersusEntityNoArgConstructor() {
+		assertThat(this.e1).isNotEqualTo(new FakeEntity());
+	}
+	
+	@Test
+	public void testEqualEntityNoArgConstructorVersusEntityNoArgConstructor() {
+		assertThat(new FakeEntity()).isNotEqualTo(new FakeEntity());
+	}
+	
+	@Test
+	public void testEqualsEntityNoArgConstructorVersusEntity() {
+		assertThat(new FakeEntity()).isNotEqualTo(this.e1);
+	}
+	
+	@Test
+	public void testEqualsEntityVersusAnotherEntityWithSameId() {
+		assertThat(this.e1).isEqualTo(new FakeEntity(this.e1.getId()));
+	}
+	
+	@Test
 	public void testEqualsDifferentObjects() {
 		assertThat(this.e1).isNotEqualTo(new Object());
 	}
@@ -65,6 +85,21 @@ public class BaseEntityTest {
 	@Test
 	public void testToStringNotEmpty() {
 		assertThat(this.e1.toString()).isNotEmpty();
+	}
+	
+	@Test
+	public void testHashCodeDifferentEntities() {
+		assertThat(this.e1.hashCode()).isNotEqualTo(this.e2.hashCode());
+	}
+	
+	@Test
+	public void testHashCodeEntityNoArgConstructorVersusEntity() {
+		assertThat(new FakeEntity().hashCode()).isNotEqualTo(this.e1.hashCode());
+	}
+	
+	@Test
+	public void testHashCodeEntityVersusAnotherEntityWithSameId() {
+		assertThat(this.e1.hashCode()).isEqualTo(new FakeEntity(this.e1.getId()).hashCode());
 	}
 	
 }
