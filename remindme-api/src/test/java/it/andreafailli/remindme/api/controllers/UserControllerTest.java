@@ -1,4 +1,4 @@
-package it.andreafailli.remindme.controllers;
+package it.andreafailli.remindme.api.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;

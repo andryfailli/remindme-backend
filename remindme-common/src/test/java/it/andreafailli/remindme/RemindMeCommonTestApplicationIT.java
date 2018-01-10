@@ -9,9 +9,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import it.andreafailli.remindme.testing.IntegrationTestCategory;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = RemindMeCommonTestApplication.class)
 @Category(IntegrationTestCategory.class)
-public class RemindMeApiTestApplicationIT {
+public class RemindMeCommonTestApplicationIT {
 
 	@Test
 	public void contextLoads() {

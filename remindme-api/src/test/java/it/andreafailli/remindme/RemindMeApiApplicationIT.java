@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import it.andreafailli.remindme.testing.IntegrationTestCategory;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = RemindMeApiApplication.class)
 @Category(IntegrationTestCategory.class)
 public class RemindMeApiApplicationIT {
 

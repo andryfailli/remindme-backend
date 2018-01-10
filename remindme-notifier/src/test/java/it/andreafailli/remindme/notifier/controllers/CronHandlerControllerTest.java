@@ -1,4 +1,4 @@
-package it.andreafailli.remindme;
+package it.andreafailli.remindme.notifier.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

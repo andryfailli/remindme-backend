@@ -19,7 +19,7 @@ import it.andreafailli.remindme.common.repositories.IReminderRepository;
 import it.andreafailli.remindme.testing.IntegrationTestCategory;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes=RemindMeCommonTestApplication.class)
+@SpringBootTest(classes = RemindMeCommonTestApplication.class)
 @Category(IntegrationTestCategory.class)
 public class ReminderServiceIT {
 	
@@ -88,6 +88,14 @@ public class ReminderServiceIT {
     	this.entityRepository.save(this.entity1);
     	this.entityService.delete(this.entity1.getId());
     	assertThat(this.entityService.get(this.entity1.getId())).isNull();
+   	}
+    
+    @Test
+   	public void testDeleteAll() {
+    	this.entityRepository.save(this.entity1);
+    	this.entityService.deleteAll();
+    	assertThat(this.entityService.get(this.entity1.getId())).isNull();
+    	assertThat(this.entityService.list()).isEmpty();
    	}
 
 }

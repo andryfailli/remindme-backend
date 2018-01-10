@@ -16,5 +16,7 @@ public interface IEntityService<T extends BaseEntity> {
 	public T update(T entity);
 	
 	public void delete(String id);
+	
+	public void deleteAll();
 
 }

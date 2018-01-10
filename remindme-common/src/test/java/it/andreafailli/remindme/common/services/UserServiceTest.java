@@ -85,5 +85,11 @@ public class UserServiceTest {
     	this.entityService.delete(this.entity1.getId());
     	verify(this.entityRepository).delete(this.entity1.getId());
    	}
+    
+    @Test
+   	public void testDeleteAll() {
+    	this.entityService.deleteAll();
+    	verify(this.entityRepository).deleteAll();
+   	}
 
 }
