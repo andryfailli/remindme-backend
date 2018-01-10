@@ -1,4 +1,4 @@
-package it.andreafailli.remindme.controllers;
+package it.andreafailli.remindme.api.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
@@ -18,6 +18,7 @@ import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
@@ -34,9 +35,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.andreafailli.remindme.api.controllers.UserController;
 import it.andreafailli.remindme.common.models.User;
 import it.andreafailli.remindme.common.services.UserService;
+import it.andreafailli.remindme.testing.UnitTestCategory;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = UserController.class)
+@Category(UnitTestCategory.class)
 public class UserControllerTest {
 
 	@Autowired

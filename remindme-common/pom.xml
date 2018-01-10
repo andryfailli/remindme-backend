@@ -50,6 +50,67 @@
 				<version>${springBoot.version}</version>
 			</plugin>
 			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.3.1</version>
+				<configuration>
+					<includedGroups>
+						<includedGroup>it.andreafailli.remindme.testing.UnitTestCategory</includedGroup>
+					</includedGroups>
+					<outputFormats>
+						<outputFormat>XML</outputFormat>
+						<outputFormat>HTML</outputFormat>
+					</outputFormats>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.23.0</version>
+				<configuration>
+					<images>
+						<image>
+							<name>mongo</name>
+							<run>
+								<ports>
+									<port>27017:27017</port>
+								</ports>
+							</run>
+						</image>
+					</images>
+					<showLogs>true</showLogs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>docker:start</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>docker:stop</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.19.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.7.9</version>

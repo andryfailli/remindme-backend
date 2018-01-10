@@ -9,13 +9,16 @@ import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import it.andreafailli.remindme.common.models.Reminder;
 import it.andreafailli.remindme.common.repositories.IReminderRepository;
+import it.andreafailli.remindme.testing.UnitTestCategory;
 
+@Category(UnitTestCategory.class)
 public class ReminderServiceTest {
 	
 	@InjectMocks
@@ -81,6 +84,12 @@ public class ReminderServiceTest {
    	public void testDelete() {
     	this.entityService.delete(this.entity1.getId());
     	verify(this.entityRepository).delete(this.entity1.getId());
+   	}
+    
+    @Test
+   	public void testDeleteAll() {
+    	this.entityService.deleteAll();
+    	verify(this.entityRepository).deleteAll();
    	}
 
 }

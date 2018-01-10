@@ -6,7 +6,11 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import it.andreafailli.remindme.testing.UnitTestCategory;
+
+@Category(UnitTestCategory.class)
 public class ReminderTest {
 
 	private Reminder r;

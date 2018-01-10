@@ -36,4 +36,8 @@ public class UserService implements IEntityService<User> {
 		this.userRepository.delete(id);
 	}
 
+	public void deleteAll() {
+		this.userRepository.deleteAll();
+	}
+	
 }

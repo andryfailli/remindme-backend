@@ -35,5 +35,9 @@ public class ReminderService implements IEntityService<Reminder> {
 	public void delete(String id) {
 		this.reminderRepository.delete(id);
 	}
+	
+	public void deleteAll() {
+		this.reminderRepository.deleteAll();
+	}
 
 }

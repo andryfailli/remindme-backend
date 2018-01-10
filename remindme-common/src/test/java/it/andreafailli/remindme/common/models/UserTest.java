@@ -4,7 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+import it.andreafailli.remindme.testing.UnitTestCategory;
+
+@Category(UnitTestCategory.class)
 public class UserTest {
 
 	private User u;
