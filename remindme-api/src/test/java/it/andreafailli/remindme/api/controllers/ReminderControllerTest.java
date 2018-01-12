@@ -13,9 +13,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,11 +50,14 @@ public class ReminderControllerTest {
 	@MockBean
 	private ReminderService reminderService;
 	
-	Reminder reminder;
+	@Autowired
+	private ObjectMapper objectMapper;
 	
-	Reminder reminder1;
+	private Reminder reminder;
+	
+	private Reminder reminder1;
     
-	Reminder reminder2;
+	private Reminder reminder2;
 
     @Before
     public void setUp(){
@@ -62,18 +66,18 @@ public class ReminderControllerTest {
         User u = new User("1");
         
         this.reminder = new Reminder();
-        this.reminder.setDate(new Date());
+        this.reminder.setDate(LocalDateTime.now());
         this.reminder.setTitle("reminder 1");
         this.reminder.setUser(u);
         
         this.reminder1 = new Reminder("1");
-        this.reminder1.setDate(new Date());
+        this.reminder1.setDate(LocalDateTime.now());
         this.reminder1.setTitle("reminder 1");
         this.reminder1.setArchived(true);
         this.reminder1.setUser(u);
         
         this.reminder2 = new Reminder("2");
-        this.reminder2.setDate(new Date());
+        this.reminder2.setDate(LocalDateTime.now());
         this.reminder2.setTitle("reminder 2");
         this.reminder2.setArchived(false);
         this.reminder2.setUser(u);
@@ -87,12 +91,12 @@ public class ReminderControllerTest {
 			.andExpect(jsonPath("$", hasSize(2)))
 			.andExpect(jsonPath("$[0].id", is(this.reminder1.getId())))
 			.andExpect(jsonPath("$[0].title", is(this.reminder1.getTitle())))
-			.andExpect(jsonPath("$[0].date", is(this.reminder1.getDate().getTime())))
+			.andExpect(jsonPath("$[0].date", is(this.reminder1.getDate().format(DateTimeFormatter.ISO_DATE_TIME))))
 			.andExpect(jsonPath("$[0].archived", is(this.reminder1.isArchived())))
 			.andExpect(jsonPath("$[0].user.id", is(this.reminder1.getUser().getId())))
 			.andExpect(jsonPath("$[1].id", is(this.reminder2.getId())))
 			.andExpect(jsonPath("$[1].title", is(this.reminder2.getTitle())))
-			.andExpect(jsonPath("$[1].date", is(this.reminder2.getDate().getTime())))
+			.andExpect(jsonPath("$[1].date", is(this.reminder2.getDate().format(DateTimeFormatter.ISO_DATE_TIME))))
 			.andExpect(jsonPath("$[1].archived", is(this.reminder2.isArchived())))
 			.andExpect(jsonPath("$[1].user.id", is(this.reminder2.getUser().getId())));
 		verify(reminderService).list();
@@ -106,7 +110,7 @@ public class ReminderControllerTest {
 			.andExpect(jsonPath("$", hasSize(1)))
 			.andExpect(jsonPath("$[0].id", is(this.reminder1.getId())))
 			.andExpect(jsonPath("$[0].title", is(this.reminder1.getTitle())))
-			.andExpect(jsonPath("$[0].date", is(this.reminder1.getDate().getTime())))
+			.andExpect(jsonPath("$[0].date", is(this.reminder1.getDate().format(DateTimeFormatter.ISO_DATE_TIME))))
 			.andExpect(jsonPath("$[0].user.id", is(this.reminder1.getUser().getId())));
 		verify(reminderService).list(true);
 	}
@@ -119,7 +123,7 @@ public class ReminderControllerTest {
 			.andExpect(jsonPath("$", hasSize(1)))
 			.andExpect(jsonPath("$[0].id", is(this.reminder2.getId())))
 			.andExpect(jsonPath("$[0].title", is(this.reminder2.getTitle())))
-			.andExpect(jsonPath("$[0].date", is(this.reminder2.getDate().getTime())))
+			.andExpect(jsonPath("$[0].date", is(this.reminder2.getDate().format(DateTimeFormatter.ISO_DATE_TIME))))
 			.andExpect(jsonPath("$[0].user.id", is(this.reminder2.getUser().getId())));
 		verify(reminderService).list(false);
 	}
@@ -140,7 +144,7 @@ public class ReminderControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.id", is(this.reminder1.getId())))
 			.andExpect(jsonPath("$.title", is(this.reminder1.getTitle())))
-			.andExpect(jsonPath("$.date", is(this.reminder1.getDate().getTime())))
+			.andExpect(jsonPath("$.date", is(this.reminder1.getDate().format(DateTimeFormatter.ISO_DATE_TIME))))
 			.andExpect(jsonPath("$.archived", is(this.reminder1.isArchived())))
 			.andExpect(jsonPath("$.user.id", is(this.reminder1.getUser().getId())));
 		verify(reminderService).get(this.reminder1.getId());
@@ -166,12 +170,12 @@ public class ReminderControllerTest {
 		this.mvc.perform(put(ReminderController.BASE_URL)
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(this.reminder))
+					.content(this.objectMapper.writeValueAsString(this.reminder))
 				)
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.id", is(this.reminder.getId())))
 			.andExpect(jsonPath("$.title", is(this.reminder.getTitle())))
-			.andExpect(jsonPath("$.date", is(this.reminder.getDate().getTime())))
+			.andExpect(jsonPath("$.date", is(this.reminder.getDate().format(DateTimeFormatter.ISO_DATE_TIME))))
 			.andExpect(jsonPath("$.archived", is(this.reminder.isArchived())))
 			.andExpect(jsonPath("$.user.id", is(this.reminder.getUser().getId())));
 		verify(reminderService).insert(any(Reminder.class));
@@ -182,7 +186,7 @@ public class ReminderControllerTest {
 		this.mvc.perform(put(ReminderController.BASE_URL)
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(this.reminder1))
+					.content(this.objectMapper.writeValueAsString(this.reminder1))
 				)
 			.andExpect(status().isBadRequest());
 		verify(reminderService, times(0)).insert(any(Reminder.class));
@@ -194,12 +198,12 @@ public class ReminderControllerTest {
 		this.mvc.perform(post(ReminderController.BASE_URL+"/"+this.reminder1.getId())
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(this.reminder1))
+					.content(this.objectMapper.writeValueAsString(this.reminder1))
 				)
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.id", is(this.reminder1.getId())))
 			.andExpect(jsonPath("$.title", is(this.reminder1.getTitle())))
-			.andExpect(jsonPath("$.date", is(this.reminder1.getDate().getTime())))
+			.andExpect(jsonPath("$.date", is(this.reminder1.getDate().format(DateTimeFormatter.ISO_DATE_TIME))))
 			.andExpect(jsonPath("$.archived", is(this.reminder1.isArchived())))
 			.andExpect(jsonPath("$.user.id", is(this.reminder1.getUser().getId())));
 		verify(reminderService).update(any(Reminder.class));
@@ -210,7 +214,7 @@ public class ReminderControllerTest {
 		this.mvc.perform(post(ReminderController.BASE_URL+"/0")
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(this.reminder))
+					.content(this.objectMapper.writeValueAsString(this.reminder))
 				)
 			.andExpect(status().isBadRequest());
 		verify(reminderService, times(0)).update(any(Reminder.class));
@@ -221,7 +225,7 @@ public class ReminderControllerTest {
 		this.mvc.perform(post(ReminderController.BASE_URL+"/"+this.reminder1.getId())
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(this.reminder2))
+					.content(this.objectMapper.writeValueAsString(this.reminder2))
 				)
 			.andExpect(status().isBadRequest());
 		verify(reminderService, times(0)).update(any(Reminder.class));

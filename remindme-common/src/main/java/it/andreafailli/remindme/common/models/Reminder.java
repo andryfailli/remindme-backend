@@ -1,12 +1,12 @@
 package it.andreafailli.remindme.common.models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Reminder extends BaseEntity {
 
 	private String title;
 	
-	private Date date;
+	private LocalDateTime date;
 	
 	private User user;
 	
@@ -26,11 +26,11 @@ public class Reminder extends BaseEntity {
 		this.title = title;
 	}
 
-	public Date getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 

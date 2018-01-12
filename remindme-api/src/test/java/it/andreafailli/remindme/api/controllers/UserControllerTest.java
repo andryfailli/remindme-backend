@@ -47,11 +47,14 @@ public class UserControllerTest {
 	@MockBean
 	private UserService userService;
 	
-	User user;
+	@Autowired
+	private ObjectMapper objectMapper;
 	
-	User user1;
+	private User user;
+	
+	private User user1;
     
-	User user2;
+	private User user2;
 
     @Before
     public void setUp(){
@@ -130,7 +133,7 @@ public class UserControllerTest {
 		this.mvc.perform(put(UserController.BASE_URL)
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(this.user))
+					.content(this.objectMapper.writeValueAsString(this.user))
 				)
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.id", is(this.user.getId())))
@@ -145,7 +148,7 @@ public class UserControllerTest {
 		this.mvc.perform(put(UserController.BASE_URL)
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(this.user1))
+					.content(this.objectMapper.writeValueAsString(this.user1))
 				)
 			.andExpect(status().isBadRequest());
 		verify(userService, times(0)).insert(any(User.class));
@@ -157,7 +160,7 @@ public class UserControllerTest {
 		this.mvc.perform(post(UserController.BASE_URL+"/"+this.user1.getId())
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(this.user1))
+					.content(this.objectMapper.writeValueAsString(this.user1))
 				)
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.id", is(this.user1.getId())))
@@ -172,7 +175,7 @@ public class UserControllerTest {
 		this.mvc.perform(post(UserController.BASE_URL+"/0")
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(this.user))
+					.content(this.objectMapper.writeValueAsString(this.user))
 				)
 			.andExpect(status().isBadRequest());
 		verify(userService, times(0)).update(any(User.class));
@@ -183,7 +186,7 @@ public class UserControllerTest {
 		this.mvc.perform(post(UserController.BASE_URL+"/"+this.user1.getId())
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON)
-					.content(new ObjectMapper().writeValueAsString(this.user2))
+					.content(this.objectMapper.writeValueAsString(this.user2))
 				)
 			.andExpect(status().isBadRequest());
 		verify(userService, times(0)).update(any(User.class));

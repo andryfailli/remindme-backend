@@ -2,7 +2,7 @@ package it.andreafailli.remindme.common.models;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class ReminderTest {
 	
 	@Test
 	public void testDate() {
-		Date value = new Date();
+		LocalDateTime value = LocalDateTime.now();
 		this.r.setDate(value);
 		assertThat(this.r.getDate()).isEqualTo(value);
 	}

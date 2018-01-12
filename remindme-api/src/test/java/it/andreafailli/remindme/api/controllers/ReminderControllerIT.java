@@ -6,7 +6,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -44,11 +45,14 @@ public class ReminderControllerIT {
 	@Autowired
 	private UserService userService;
 	
-	Reminder reminder;
+	@Autowired
+	private ObjectMapper objectMapper;
 	
-	Reminder reminder1;
+	private Reminder reminder;
+	
+	private Reminder reminder1;
     
-	Reminder reminder2;
+	private Reminder reminder2;
 	
 	@Before
     public void setUp(){
@@ -61,18 +65,18 @@ public class ReminderControllerIT {
 		this.userService.insert(u);
         
         this.reminder = new Reminder();
-        this.reminder.setDate(new Date());
+        this.reminder.setDate(LocalDateTime.now());
         this.reminder.setTitle("reminder 1");
         this.reminder.setUser(u);
         
         this.reminder1 = new Reminder();
-        this.reminder1.setDate(new Date());
+        this.reminder1.setDate(LocalDateTime.now());
         this.reminder1.setTitle("reminder 1");
         this.reminder1.setArchived(true);
         this.reminder1.setUser(u);
         
         this.reminder2 = new Reminder();
-        this.reminder2.setDate(new Date());
+        this.reminder2.setDate(LocalDateTime.now());
         this.reminder2.setTitle("reminder 2");
         this.reminder2.setArchived(false);
         this.reminder2.setUser(u);
@@ -92,12 +96,12 @@ public class ReminderControllerIT {
 			.contentType(ContentType.JSON)
 			.body("$", hasSize(2))
 			.body("[0].id", equalTo(this.reminder1.getId()))
-			.body("[0].date", equalTo(this.reminder1.getDate().getTime()))
+			.body("[0].date", equalTo(this.reminder1.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
 			.body("[0].title", equalTo(this.reminder1.getTitle()))
 			.body("[0].archived", equalTo(this.reminder1.isArchived()))
 			.body("[0].user.id", equalTo(this.reminder1.getUser().getId()))
 			.body("[1].id", equalTo(this.reminder2.getId()))
-			.body("[1].date", equalTo(this.reminder2.getDate().getTime()))
+			.body("[1].date", equalTo(this.reminder2.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
 			.body("[1].title", equalTo(this.reminder2.getTitle()))
 			.body("[1].archived", equalTo(this.reminder2.isArchived()))
 			.body("[1].user.id", equalTo(this.reminder2.getUser().getId()));
@@ -128,7 +132,7 @@ public class ReminderControllerIT {
 			.contentType(ContentType.JSON)
 			.body("$", hasSize(1))
 			.body("[0].id", equalTo(this.reminder1.getId()))
-			.body("[0].date", equalTo(this.reminder1.getDate().getTime()))
+			.body("[0].date", equalTo(this.reminder1.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
 			.body("[0].title", equalTo(this.reminder1.getTitle()))
 			.body("[0].archived", equalTo(this.reminder1.isArchived()))
 			.body("[0].user.id", equalTo(this.reminder1.getUser().getId()));
@@ -147,7 +151,7 @@ public class ReminderControllerIT {
 			.contentType(ContentType.JSON)
 			.body("$", hasSize(1))
 			.body("[0].id", equalTo(this.reminder2.getId()))
-			.body("[0].date", equalTo(this.reminder2.getDate().getTime()))
+			.body("[0].date", equalTo(this.reminder2.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
 			.body("[0].title", equalTo(this.reminder2.getTitle()))
 			.body("[0].archived", equalTo(this.reminder2.isArchived()))
 			.body("[0].user.id", equalTo(this.reminder2.getUser().getId()));
@@ -164,7 +168,7 @@ public class ReminderControllerIT {
 			.statusCode(200)
 			.contentType(ContentType.JSON)
 			.body("id", equalTo(this.reminder1.getId()))
-			.body("date", equalTo(this.reminder1.getDate().getTime()))
+			.body("date", equalTo(this.reminder1.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
 			.body("title", equalTo(this.reminder1.getTitle()))
 			.body("archived", equalTo(this.reminder1.isArchived()))
 			.body("user.id", equalTo(this.reminder1.getUser().getId()));
@@ -184,7 +188,7 @@ public class ReminderControllerIT {
 	public void testInsert() throws Exception {
 		given()
 			.contentType(ContentType.JSON)
-			.body(new ObjectMapper().writeValueAsString(this.reminder))
+			.body(this.objectMapper.writeValueAsString(this.reminder))
 			.when()
 			.put(this.url + ReminderController.BASE_URL)
 			.then()
@@ -192,7 +196,7 @@ public class ReminderControllerIT {
 			.statusCode(201)
 			.contentType(ContentType.JSON)
 			.body("id", notNullValue())
-			.body("date", equalTo(this.reminder.getDate().getTime()))
+			.body("date", equalTo(this.reminder.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
 			.body("title", equalTo(this.reminder.getTitle()))
 			.body("archived", equalTo(this.reminder.isArchived()))
 			.body("user.id", equalTo(this.reminder.getUser().getId()));
@@ -203,7 +207,7 @@ public class ReminderControllerIT {
 		this.reminder.setId("0");
 		given()
 			.contentType(ContentType.JSON)
-			.body(new ObjectMapper().writeValueAsString(this.reminder))
+			.body(this.objectMapper.writeValueAsString(this.reminder))
 			.when()
 			.put(this.url + ReminderController.BASE_URL)
 			.then()
@@ -217,7 +221,7 @@ public class ReminderControllerIT {
 		this.reminder.setTitle("modified");
 		given()
 			.contentType(ContentType.JSON)
-			.body(new ObjectMapper().writeValueAsString(this.reminder))
+			.body(this.objectMapper.writeValueAsString(this.reminder))
 			.when()
 			.post(this.url + ReminderController.BASE_URL + "/" + this.reminder.getId())
 			.then()
@@ -225,7 +229,7 @@ public class ReminderControllerIT {
 			.statusCode(200)
 			.contentType(ContentType.JSON)
 			.body("id", notNullValue())
-			.body("date", equalTo(this.reminder.getDate().getTime()))
+			.body("date", equalTo(this.reminder.getDate().format(DateTimeFormatter.ISO_DATE_TIME)))
 			.body("title", equalTo(this.reminder.getTitle()))
 			.body("archived", equalTo(this.reminder.isArchived()))
 			.body("user.id", equalTo(this.reminder.getUser().getId()));
@@ -241,7 +245,7 @@ public class ReminderControllerIT {
 		this.reminder.setId(null);
 		given()
 			.contentType(ContentType.JSON)
-			.body(new ObjectMapper().writeValueAsString(this.reminder))
+			.body(this.objectMapper.writeValueAsString(this.reminder))
 			.when()
 			.post(this.url + ReminderController.BASE_URL + "/0")
 			.then()
@@ -257,7 +261,7 @@ public class ReminderControllerIT {
 		this.reminder.setTitle("modified");
 		given()
 			.contentType(ContentType.JSON)
-			.body(new ObjectMapper().writeValueAsString(this.reminder))
+			.body(this.objectMapper.writeValueAsString(this.reminder))
 			.when()
 			.post(this.url + ReminderController.BASE_URL + "/0")
 			.then()
