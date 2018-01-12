@@ -68,7 +68,7 @@ public class ReminderControllerIT {
         this.reminder1 = new Reminder();
         this.reminder1.setDate(new Date());
         this.reminder1.setTitle("reminder 1");
-        this.reminder.setArchived(true);
+        this.reminder1.setArchived(true);
         this.reminder1.setUser(u);
         
         this.reminder2 = new Reminder();
