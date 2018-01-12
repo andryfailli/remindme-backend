@@ -37,11 +37,14 @@ public class UserControllerIT {
 	@Autowired
 	private UserService userService;
 	
-	User user;
+	@Autowired
+	private ObjectMapper objectMapper;
 	
-	User user1;
+	private User user;
+	
+	private User user1;
     
-	User user2;
+	private User user2;
 	
 	@Before
     public void setUp(){
@@ -129,7 +132,7 @@ public class UserControllerIT {
 	public void testInsert() throws Exception {
 		given()
 			.contentType(ContentType.JSON)
-			.body(new ObjectMapper().writeValueAsString(this.user))
+			.body(this.objectMapper.writeValueAsString(this.user))
 			.when()
 			.put(this.url + UserController.BASE_URL)
 			.then()
@@ -147,7 +150,7 @@ public class UserControllerIT {
 		this.user.setId("0");
 		given()
 			.contentType(ContentType.JSON)
-			.body(new ObjectMapper().writeValueAsString(this.user))
+			.body(this.objectMapper.writeValueAsString(this.user))
 			.when()
 			.put(this.url + UserController.BASE_URL)
 			.then()
@@ -161,7 +164,7 @@ public class UserControllerIT {
 		this.user.setName("modified");
 		given()
 			.contentType(ContentType.JSON)
-			.body(new ObjectMapper().writeValueAsString(this.user))
+			.body(this.objectMapper.writeValueAsString(this.user))
 			.when()
 			.post(this.url + UserController.BASE_URL + "/" + this.user.getId())
 			.then()
@@ -184,7 +187,7 @@ public class UserControllerIT {
 		this.user.setId(null);
 		given()
 			.contentType(ContentType.JSON)
-			.body(new ObjectMapper().writeValueAsString(this.user))
+			.body(this.objectMapper.writeValueAsString(this.user))
 			.when()
 			.post(this.url + UserController.BASE_URL + "/0")
 			.then()
@@ -200,7 +203,7 @@ public class UserControllerIT {
 		this.user.setName("modified");
 		given()
 			.contentType(ContentType.JSON)
-			.body(new ObjectMapper().writeValueAsString(this.user))
+			.body(this.objectMapper.writeValueAsString(this.user))
 			.when()
 			.post(this.url + UserController.BASE_URL + "/0")
 			.then()
