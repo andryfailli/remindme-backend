@@ -1,6 +1,7 @@
 package it.andreafailli.remindme.api.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
@@ -9,7 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,7 +33,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.andreafailli.remindme.api.controllers.ReminderController;
 import it.andreafailli.remindme.common.models.Reminder;
 import it.andreafailli.remindme.common.models.User;
 import it.andreafailli.remindme.common.services.ReminderService;
@@ -70,11 +69,13 @@ public class ReminderControllerTest {
         this.reminder1 = new Reminder("1");
         this.reminder1.setDate(new Date());
         this.reminder1.setTitle("reminder 1");
+        this.reminder1.setArchived(true);
         this.reminder1.setUser(u);
         
         this.reminder2 = new Reminder("2");
         this.reminder2.setDate(new Date());
         this.reminder2.setTitle("reminder 2");
+        this.reminder2.setArchived(false);
         this.reminder2.setUser(u);
     }
 
@@ -83,15 +84,31 @@ public class ReminderControllerTest {
 		given(reminderService.list()).willReturn(Arrays.asList(this.reminder1, this.reminder2));
 		this.mvc.perform(get(ReminderController.BASE_URL).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
+			.andExpect(jsonPath("$", hasSize(2)))
 			.andExpect(jsonPath("$[0].id", is(this.reminder1.getId())))
 			.andExpect(jsonPath("$[0].title", is(this.reminder1.getTitle())))
 			.andExpect(jsonPath("$[0].date", is(this.reminder1.getDate().getTime())))
+			.andExpect(jsonPath("$[0].archived", is(this.reminder1.isArchived())))
 			.andExpect(jsonPath("$[0].user.id", is(this.reminder1.getUser().getId())))
 			.andExpect(jsonPath("$[1].id", is(this.reminder2.getId())))
 			.andExpect(jsonPath("$[1].title", is(this.reminder2.getTitle())))
 			.andExpect(jsonPath("$[1].date", is(this.reminder2.getDate().getTime())))
+			.andExpect(jsonPath("$[1].archived", is(this.reminder2.isArchived())))
 			.andExpect(jsonPath("$[1].user.id", is(this.reminder2.getUser().getId())));
 		verify(reminderService).list();
+	}
+	
+	@Test
+	public void testListByArchived() throws Exception {
+		given(reminderService.list(true)).willReturn(Arrays.asList(this.reminder1));
+		this.mvc.perform(get(ReminderController.BASE_URL).accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$", hasSize(1)))
+			.andExpect(jsonPath("$[0].id", is(this.reminder1.getId())))
+			.andExpect(jsonPath("$[0].title", is(this.reminder1.getTitle())))
+			.andExpect(jsonPath("$[0].date", is(this.reminder1.getDate().getTime())))
+			.andExpect(jsonPath("$[0].user.id", is(this.reminder1.getUser().getId())));
+		verify(reminderService).list(true);
 	}
 	
 	@Test
@@ -99,7 +116,7 @@ public class ReminderControllerTest {
 		given(reminderService.list()).willReturn(new ArrayList<Reminder>());
 		this.mvc.perform(get(ReminderController.BASE_URL).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(content().json("[]"));
+			.andExpect(jsonPath("$", hasSize(0)));
 		verify(reminderService).list();
 	}
 	
@@ -111,6 +128,7 @@ public class ReminderControllerTest {
 			.andExpect(jsonPath("$.id", is(this.reminder1.getId())))
 			.andExpect(jsonPath("$.title", is(this.reminder1.getTitle())))
 			.andExpect(jsonPath("$.date", is(this.reminder1.getDate().getTime())))
+			.andExpect(jsonPath("$.archived", is(this.reminder1.isArchived())))
 			.andExpect(jsonPath("$.user.id", is(this.reminder1.getUser().getId())));
 		verify(reminderService).get(this.reminder1.getId());
 	}
@@ -141,6 +159,7 @@ public class ReminderControllerTest {
 			.andExpect(jsonPath("$.id", is(this.reminder.getId())))
 			.andExpect(jsonPath("$.title", is(this.reminder.getTitle())))
 			.andExpect(jsonPath("$.date", is(this.reminder.getDate().getTime())))
+			.andExpect(jsonPath("$.archived", is(this.reminder.isArchived())))
 			.andExpect(jsonPath("$.user.id", is(this.reminder.getUser().getId())));
 		verify(reminderService).insert(any(Reminder.class));
 	}
@@ -168,6 +187,7 @@ public class ReminderControllerTest {
 			.andExpect(jsonPath("$.id", is(this.reminder1.getId())))
 			.andExpect(jsonPath("$.title", is(this.reminder1.getTitle())))
 			.andExpect(jsonPath("$.date", is(this.reminder1.getDate().getTime())))
+			.andExpect(jsonPath("$.archived", is(this.reminder1.isArchived())))
 			.andExpect(jsonPath("$.user.id", is(this.reminder1.getUser().getId())));
 		verify(reminderService).update(any(Reminder.class));
 	}
