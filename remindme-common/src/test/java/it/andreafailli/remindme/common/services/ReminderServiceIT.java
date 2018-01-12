@@ -36,7 +36,9 @@ public class ReminderServiceIT {
     @Before
     public void setUp(){
     	this.entity1 = new Reminder();
+    	this.entity1.setArchived(true);
     	this.entity2 = new Reminder();
+    	this.entity2.setArchived(false);
     }
     
     @After
@@ -54,6 +56,18 @@ public class ReminderServiceIT {
    	public void testListEmpty() {
    		assertThat(this.entityService.list()).isEmpty();
    	}
+    
+    @Test
+	public void testListArchived() {
+		this.entityRepository.save(Arrays.asList(this.entity1, this.entity2));
+		assertThat(this.entityService.list(true)).containsExactly(this.entity1);
+	}
+    
+    @Test
+	public void testListNotArchived() {
+		this.entityRepository.save(Arrays.asList(this.entity1, this.entity2));
+		assertThat(this.entityService.list(false)).containsExactly(this.entity2);
+	}
     
     @Test
    	public void testGet() {
