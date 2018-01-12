@@ -10,6 +10,8 @@ public class Reminder extends BaseEntity {
 	
 	private User user;
 	
+	private boolean archived;
+	
 	public Reminder() {}
 	
 	public Reminder(String id) {
@@ -38,6 +40,14 @@ public class Reminder extends BaseEntity {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public boolean isArchived() {
+		return archived;
+	}
+
+	public void setArchived(boolean archived) {
+		this.archived = archived;
 	}
 	
 }
