@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -37,6 +38,16 @@ public class ReminderController {
 		LOGGER.entry();
 		
 		Iterable<Reminder> reminders = this.reminderService.list();
+		
+		LOGGER.exit(reminders);
+		return reminders;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, params = "archived", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Iterable<Reminder> listByArchived(@RequestParam boolean archived) {
+		LOGGER.entry(archived);
+		
+		Iterable<Reminder> reminders = this.reminderService.list(archived);
 		
 		LOGGER.exit(reminders);
 		return reminders;

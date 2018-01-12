@@ -54,4 +54,11 @@ public class ReminderTest {
 		assertThat(this.r.getUser()).isEqualTo(value);
 	}
 	
+	@Test
+	public void testArchived() {
+		boolean value = true;
+		this.r.setArchived(value);
+		assertThat(this.r.isArchived()).isEqualTo(value);
+	}
+	
 }

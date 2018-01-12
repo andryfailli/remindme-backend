@@ -1,6 +1,7 @@
 package it.andreafailli.remindme.api.controllers;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
@@ -9,7 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,7 +32,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.andreafailli.remindme.api.controllers.UserController;
 import it.andreafailli.remindme.common.models.User;
 import it.andreafailli.remindme.common.services.UserService;
 import it.andreafailli.remindme.testing.UnitTestCategory;
@@ -95,7 +94,7 @@ public class UserControllerTest {
 		given(userService.list()).willReturn(new ArrayList<User>());
 		this.mvc.perform(get(UserController.BASE_URL).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(content().json("[]"));
+			.andExpect(jsonPath("$", hasSize(0)));
 		verify(userService).list();
 	}
 	

@@ -19,6 +19,10 @@ public class ReminderService implements IEntityService<Reminder> {
 	public Iterable<Reminder> list() {
 		return this.reminderRepository.findAll();
 	}
+	
+	public Iterable<Reminder> list(boolean archived) {
+		return this.reminderRepository.findByArchived(archived);
+	}
 
 	public Reminder get(String id) {
 		return this.reminderRepository.findOne(id);

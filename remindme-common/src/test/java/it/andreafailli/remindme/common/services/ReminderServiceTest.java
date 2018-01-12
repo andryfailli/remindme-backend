@@ -36,7 +36,9 @@ public class ReminderServiceTest {
         MockitoAnnotations.initMocks(this);
         
         this.entity1 = new Reminder("1");
+        this.entity1.setArchived(true);
         this.entity2 = new Reminder("2");
+        this.entity2.setArchived(false);
     }
     
     @Test
@@ -52,6 +54,20 @@ public class ReminderServiceTest {
    		assertThat(this.entityService.list()).isEmpty();
    		verify(this.entityRepository).findAll();
    	}
+    
+    @Test
+	public void testListArchived() {
+		when(this.entityRepository.findByArchived(true)).thenReturn(Arrays.asList(this.entity1));
+		assertThat(this.entityService.list(true)).containsExactly(this.entity1);
+		verify(this.entityRepository).findByArchived(true);
+	}
+    
+    @Test
+	public void testListNotArchived() {
+		when(this.entityRepository.findByArchived(false)).thenReturn(Arrays.asList(this.entity2));
+		assertThat(this.entityService.list(false)).containsExactly(this.entity2);
+		verify(this.entityRepository).findByArchived(false);
+	}
     
     @Test
    	public void testGet() {
