@@ -101,7 +101,7 @@ public class ReminderControllerTest {
 	@Test
 	public void testListByArchived() throws Exception {
 		given(reminderService.list(true)).willReturn(Arrays.asList(this.reminder1));
-		this.mvc.perform(get(ReminderController.BASE_URL).accept(MediaType.APPLICATION_JSON))
+		this.mvc.perform(get(ReminderController.BASE_URL + "?archived=true").accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$", hasSize(1)))
 			.andExpect(jsonPath("$[0].id", is(this.reminder1.getId())))
