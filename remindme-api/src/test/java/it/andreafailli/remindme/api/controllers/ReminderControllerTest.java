@@ -99,7 +99,7 @@ public class ReminderControllerTest {
 	}
 	
 	@Test
-	public void testListByArchived() throws Exception {
+	public void testListByArchivedTrue() throws Exception {
 		given(reminderService.list(true)).willReturn(Arrays.asList(this.reminder1));
 		this.mvc.perform(get(ReminderController.BASE_URL + "?archived=true").accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -109,6 +109,19 @@ public class ReminderControllerTest {
 			.andExpect(jsonPath("$[0].date", is(this.reminder1.getDate().getTime())))
 			.andExpect(jsonPath("$[0].user.id", is(this.reminder1.getUser().getId())));
 		verify(reminderService).list(true);
+	}
+	
+	@Test
+	public void testListByArchivedFalse() throws Exception {
+		given(reminderService.list(false)).willReturn(Arrays.asList(this.reminder2));
+		this.mvc.perform(get(ReminderController.BASE_URL + "?archived=false").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$", hasSize(1)))
+			.andExpect(jsonPath("$[0].id", is(this.reminder2.getId())))
+			.andExpect(jsonPath("$[0].title", is(this.reminder2.getTitle())))
+			.andExpect(jsonPath("$[0].date", is(this.reminder2.getDate().getTime())))
+			.andExpect(jsonPath("$[0].user.id", is(this.reminder2.getUser().getId())));
+		verify(reminderService).list(false);
 	}
 	
 	@Test
