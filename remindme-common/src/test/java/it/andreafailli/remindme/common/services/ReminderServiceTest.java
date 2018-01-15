@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -37,8 +38,10 @@ public class ReminderServiceTest {
         
         this.entity1 = new Reminder("1");
         this.entity1.setArchived(true);
+        this.entity1.setDate(LocalDateTime.parse("2018-01-14T18:05:21"));
         this.entity2 = new Reminder("2");
         this.entity2.setArchived(false);
+        this.entity2.setDate(LocalDateTime.parse("2018-01-15T19:06:22"));
     }
     
     @Test
@@ -61,6 +64,14 @@ public class ReminderServiceTest {
 		assertThat(this.entityService.list(true)).containsExactly(this.entity1);
 		verify(this.entityRepository).findByArchived(true);
 	}
+    
+    @Test
+   	public void testListDate() {
+    	LocalDateTime date = this.entity1.getDate();
+   		when(this.entityRepository.findByDate(date)).thenReturn(Arrays.asList(this.entity1));
+   		assertThat(this.entityService.list(date)).containsExactly(this.entity1);
+   		verify(this.entityRepository).findByDate(date);
+   	}
     
     @Test
 	public void testListNotArchived() {

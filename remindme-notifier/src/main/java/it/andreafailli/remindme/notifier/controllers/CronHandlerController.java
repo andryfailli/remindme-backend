@@ -1,5 +1,7 @@
 package it.andreafailli.remindme.notifier.controllers;
 
+import java.time.LocalDateTime;
+
 import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.andreafailli.remindme.common.models.Reminder;
 import it.andreafailli.remindme.common.services.ReminderService;
 
 @RestController
@@ -24,11 +27,21 @@ public static final String BASE_URL = "/";
 	public ResponseEntity<Void> handler() {
 		LOGGER.entry();
 		
-		//TODO: list current reminders and send notifications
+		LocalDateTime now = LocalDateTime.now();
+		
+		Iterable<Reminder> reminders = this.reminderService.list(now);
+		for (Reminder reminder : reminders) {
+			this.sendNotification(reminder);
+		}
+		
 		ResponseEntity<Void> response = ResponseEntity.ok().build();
 		
 		LOGGER.exit(response);
 		return response;
+	}
+	
+	private void sendNotification(Reminder reminder) {
+		// TODO: send notification
 	}
 
 }
