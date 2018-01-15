@@ -1,5 +1,8 @@
 package it.andreafailli.remindme.common.services;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,10 @@ public class ReminderService implements IEntityService<Reminder> {
 	
 	public Iterable<Reminder> list(boolean archived) {
 		return this.reminderRepository.findByArchived(archived);
+	}
+	
+	public Iterable<Reminder> list(LocalDateTime date) {
+		return this.reminderRepository.findByDate(date.truncatedTo(ChronoUnit.MINUTES));
 	}
 
 	public Reminder get(String id) {

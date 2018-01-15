@@ -2,6 +2,7 @@ package it.andreafailli.remindme.common.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import org.junit.After;
@@ -37,8 +38,10 @@ public class ReminderServiceIT {
     public void setUp(){
     	this.entity1 = new Reminder();
     	this.entity1.setArchived(true);
+    	this.entity1.setDate(LocalDateTime.parse("2018-01-14T18:05:21"));
     	this.entity2 = new Reminder();
     	this.entity2.setArchived(false);
+    	this.entity2.setDate(LocalDateTime.parse("2018-01-15T19:06:22"));
     }
     
     @After
@@ -68,6 +71,13 @@ public class ReminderServiceIT {
 		this.entityRepository.save(Arrays.asList(this.entity1, this.entity2));
 		assertThat(this.entityService.list(false)).containsExactly(this.entity2);
 	}
+    
+    @Test
+   	public void testListDate() {
+    	LocalDateTime date = this.entity1.getDate();
+    	this.entityRepository.save(Arrays.asList(this.entity1, this.entity2));
+   		assertThat(this.entityService.list(date)).containsExactly(this.entity1);
+   	}
     
     @Test
    	public void testGet() {
