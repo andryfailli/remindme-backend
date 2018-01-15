@@ -42,9 +42,20 @@ public class ReminderTest {
 	
 	@Test
 	public void testDate() {
-		LocalDateTime value = LocalDateTime.now();
+		LocalDateTime value = LocalDateTime.parse("2018-01-15T19:06:00");
 		this.r.setDate(value);
 		assertThat(this.r.getDate()).isEqualTo(value);
+	}
+	
+	@Test
+	public void testDateTruncated() {
+		LocalDateTime value = LocalDateTime.parse("2018-01-15T19:06:09");
+		LocalDateTime valueTruncated = LocalDateTime.parse("2018-01-15T19:06:00");
+		
+		this.r.setDate(value);
+		assertThat(this.r.getDate()).isEqualTo(valueTruncated);
+		assertThat(this.r.getDate().getSecond()).isZero();
+		assertThat(this.r.getDate().getNano()).isZero();
 	}
 	
 	@Test

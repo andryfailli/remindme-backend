@@ -1,6 +1,7 @@
 package it.andreafailli.remindme.common.models;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class Reminder extends BaseEntity {
 
@@ -31,7 +32,7 @@ public class Reminder extends BaseEntity {
 	}
 
 	public void setDate(LocalDateTime date) {
-		this.date = date;
+		this.date = date.truncatedTo(ChronoUnit.MINUTES);
 	}
 
 	public User getUser() {
