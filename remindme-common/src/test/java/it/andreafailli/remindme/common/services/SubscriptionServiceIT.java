@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import it.andreafailli.remindme.RemindMeCommonTestApplication;
 import it.andreafailli.remindme.common.models.Subscription;
+import it.andreafailli.remindme.common.models.User;
 import it.andreafailli.remindme.common.repositories.ISubscriptionRepository;
 import it.andreafailli.remindme.testing.IntegrationTestCategory;
 
@@ -53,6 +54,22 @@ public class SubscriptionServiceIT {
     @Test
    	public void testListEmpty() {
    		assertThat(this.entityService.list()).isEmpty();
+   	}
+    
+    @Test
+	public void testListUser() {
+    	User user1 = new User("1");
+    	User user2 = new User("2");
+    	this.entity1.setUserId(user1.getId());
+    	this.entity2.setUserId(user2.getId());
+		this.entityRepository.save(Arrays.asList(this.entity1, this.entity2));
+		assertThat(this.entityService.list(user1)).containsExactly(this.entity1);
+	}
+    
+    @Test
+   	public void testListUserEmpty() {
+    	User user1 = new User("1");
+   		assertThat(this.entityService.list(user1)).isEmpty();
    	}
     
     @Test

@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import it.andreafailli.remindme.common.models.Subscription;
+import it.andreafailli.remindme.common.models.User;
 import it.andreafailli.remindme.common.repositories.ISubscriptionRepository;
 import it.andreafailli.remindme.testing.UnitTestCategory;
 
@@ -51,6 +52,22 @@ public class SubscriptionServiceTest {
    		when(this.entityRepository.findAll()).thenReturn(new ArrayList<Subscription>());
    		assertThat(this.entityService.list()).isEmpty();
    		verify(this.entityRepository).findAll();
+   	}
+    
+    @Test
+	public void testListUser() {
+    	User user = new User("1");
+		when(this.entityRepository.findByUserId(user.getId())).thenReturn(Arrays.asList(this.entity1, this.entity2));
+		assertThat(this.entityService.list(user)).containsExactly(this.entity1, this.entity2);
+		verify(this.entityRepository).findByUserId(user.getId());
+	}
+    
+    @Test
+   	public void testListUserEmpty() {
+    	User user = new User("1");
+		when(this.entityRepository.findByUserId(user.getId())).thenReturn(new ArrayList<Subscription>());
+   		assertThat(this.entityService.list(user)).isEmpty();
+   		verify(this.entityRepository).findByUserId(user.getId());
    	}
     
     @Test
