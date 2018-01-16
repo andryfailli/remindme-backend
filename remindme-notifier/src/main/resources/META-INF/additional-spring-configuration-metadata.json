@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "firebase.config.serverKey",
+    "type": "java.lang.String",
+    "description": "Firebase Server key"
+  },
+  {
+    "name": "remindme.frontend.url",
+    "type": "java.lang.String",
+    "description": "Url of RemindMe! frontend"
+  },
+  {
+    "name": "firebase.fcmServerUrl",
+    "type": "java.lang.String",
+    "description": "Firebase Cloud Messaging server url"
+  }
+]}
