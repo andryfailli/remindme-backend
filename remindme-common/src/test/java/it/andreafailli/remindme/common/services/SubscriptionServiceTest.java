@@ -81,6 +81,13 @@ public class SubscriptionServiceTest {
    	}
     
     @Test
+   	public void testSave() {
+   		when(this.entityRepository.save(this.entity1)).thenReturn(this.entity1);
+   		assertThat(this.entityService.save(this.entity1)).isEqualTo(this.entity1);
+   		verify(this.entityRepository).save(this.entity1);
+   	}
+    
+    @Test
    	public void testDelete() {
     	this.entityService.delete(this.entity1.getId());
     	verify(this.entityRepository).delete(this.entity1.getId());

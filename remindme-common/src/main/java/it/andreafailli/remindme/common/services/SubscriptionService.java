@@ -25,10 +25,14 @@ public class SubscriptionService implements IEntityService<Subscription> {
 	}
 
 	public Subscription insert(Subscription subscription) {
-		return this.userRepository.save(subscription);
+		return this.save(subscription);
 	}
 
 	public Subscription update(Subscription subscription) {
+		return this.save(subscription);
+	}
+	
+	public Subscription save(Subscription subscription) {
 		return this.userRepository.save(subscription);
 	}
 	

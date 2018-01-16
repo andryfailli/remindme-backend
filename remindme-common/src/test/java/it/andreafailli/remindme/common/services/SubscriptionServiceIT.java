@@ -84,6 +84,23 @@ public class SubscriptionServiceIT {
    	}
     
     @Test
+   	public void testSaveInsert() {
+   		this.entityRepository.save(this.entity1);
+   		assertThat(this.entityService.save(this.entity1)).isEqualTo(this.entity1);
+   	}
+    
+    @Test
+   	public void testSaveUpdate() {
+    	this.entityRepository.save(this.entity1);
+    	String newValue = "modified";
+    	this.entity1.setUserId(newValue);
+    	
+    	Subscription updatedEntity = this.entityService.save(this.entity1);
+   		assertThat(updatedEntity).isEqualTo(this.entity1);
+    	assertThat(updatedEntity.getUserId()).isEqualTo(newValue);
+   	}
+    
+    @Test
    	public void testDelete() {
     	this.entityRepository.save(this.entity1);
     	this.entityService.delete(this.entity1.getId());
