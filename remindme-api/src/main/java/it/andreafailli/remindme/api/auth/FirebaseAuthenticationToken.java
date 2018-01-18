@@ -13,7 +13,7 @@ public class FirebaseAuthenticationToken extends AbstractAuthenticationToken {
 	
 	private final String principal;
 	
-	private FirebaseToken credentials;
+	private transient FirebaseToken credentials;
 
 	public FirebaseAuthenticationToken(String principal, FirebaseToken credentials) {
 		super(null);
