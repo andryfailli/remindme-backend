@@ -18,9 +18,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import it.andreafailli.remindme.Profiles;
 import it.andreafailli.remindme.common.models.Reminder;
 import it.andreafailli.remindme.common.models.Subscription;
 import it.andreafailli.remindme.common.models.User;
@@ -31,8 +33,9 @@ import it.andreafailli.remindme.notifier.services.NotificationService;
 import it.andreafailli.remindme.testing.UnitTestCategory;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = CronHandlerController.class)
 @Category(UnitTestCategory.class)
+@WebMvcTest(controllers = CronHandlerController.class)
+@ActiveProfiles(Profiles.TEST)
 public class CronHandlerControllerTest {
 	
 	@Autowired

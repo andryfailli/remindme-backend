@@ -23,14 +23,14 @@ import it.andreafailli.remindme.testing.UnitTestCategory;
 public class SubscriptionServiceTest {
 	
 	@InjectMocks
-    SubscriptionService entityService;
+	private SubscriptionService entityService;
 
     @Mock
-    ISubscriptionRepository entityRepository;
+    private ISubscriptionRepository entityRepository;
     
-    Subscription entity1;
+    private Subscription entity1;
     
-    Subscription entity2;
+    private Subscription entity2;
 
     @Before
     public void setUp(){

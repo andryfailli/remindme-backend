@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import it.andreafailli.remindme.Profiles;
 import it.andreafailli.remindme.RemindMeNotifierApplication;
 import it.andreafailli.remindme.common.models.Reminder;
 import it.andreafailli.remindme.common.models.Subscription;
@@ -24,8 +26,9 @@ import it.andreafailli.remindme.common.services.UserService;
 import it.andreafailli.remindme.testing.IntegrationTestCategory;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RemindMeNotifierApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @Category(IntegrationTestCategory.class)
+@SpringBootTest(classes = RemindMeNotifierApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@ActiveProfiles(Profiles.TEST)
 public class CronHandlerControllerIT {
 	
 	@LocalServerPort

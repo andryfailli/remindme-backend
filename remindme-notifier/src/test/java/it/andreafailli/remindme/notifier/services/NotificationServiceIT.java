@@ -6,15 +6,18 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import it.andreafailli.remindme.Profiles;
 import it.andreafailli.remindme.RemindMeNotifierApplication;
 import it.andreafailli.remindme.notifier.models.Notification;
 import it.andreafailli.remindme.testing.IntegrationTestCategory;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RemindMeNotifierApplication.class)
 @Category(IntegrationTestCategory.class)
+@SpringBootTest(classes = RemindMeNotifierApplication.class)
+@ActiveProfiles(Profiles.TEST)
 public class NotificationServiceIT {
 	
 	@Autowired
