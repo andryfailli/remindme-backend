@@ -14,19 +14,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.http.ContentType;
+import it.andreafailli.remindme.Profiles;
 import it.andreafailli.remindme.RemindMeApiApplication;
+import it.andreafailli.remindme.api.auth.FirebaseAuthFilter;
+import it.andreafailli.remindme.api.auth.FirebaseIdTokenAuthenticatorMock;
 import it.andreafailli.remindme.common.models.User;
 import it.andreafailli.remindme.common.services.UserService;
 import it.andreafailli.remindme.testing.IntegrationTestCategory;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RemindMeApiApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @Category(IntegrationTestCategory.class)
+@SpringBootTest(classes = RemindMeApiApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@ActiveProfiles(Profiles.TEST)
 public class UserControllerIT {
 	
 	@LocalServerPort
@@ -74,6 +79,7 @@ public class UserControllerIT {
 		this.userService.insert(this.user1);
         this.userService.insert(this.user2);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.get(this.url + UserController.BASE_URL)
 			.then()
@@ -93,6 +99,7 @@ public class UserControllerIT {
 	@Test
 	public void testListEmpty() throws Exception {
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.get(this.url + UserController.BASE_URL)
 			.then()
@@ -106,6 +113,7 @@ public class UserControllerIT {
 	public void testGet() throws Exception {
 		this.userService.insert(this.user1);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.get(this.url + UserController.BASE_URL + "/" + this.user1.getId())
 			.then()
@@ -121,6 +129,7 @@ public class UserControllerIT {
 	@Test
 	public void testGetNotFound() throws Exception {
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.get(this.url + UserController.BASE_URL + "/0")
 			.then()
@@ -131,6 +140,7 @@ public class UserControllerIT {
 	@Test
 	public void testInsert() throws Exception {
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.user))
 			.when()
@@ -149,6 +159,7 @@ public class UserControllerIT {
 	public void testInsertWithId() throws Exception {
 		this.user.setId("0");
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.user))
 			.when()
@@ -163,6 +174,7 @@ public class UserControllerIT {
 		this.userService.insert(user);
 		this.user.setName("modified");
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.user))
 			.when()
@@ -186,6 +198,7 @@ public class UserControllerIT {
 		this.user.setName("modified");
 		this.user.setId(null);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.user))
 			.when()
@@ -202,6 +215,7 @@ public class UserControllerIT {
 		String oldValue = this.user.getName();
 		this.user.setName("modified");
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.user))
 			.when()
@@ -216,6 +230,7 @@ public class UserControllerIT {
 	public void testDelete() throws Exception {
 		this.userService.insert(user);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.delete(this.url + UserController.BASE_URL + "/" + this.user.getId())
 			.then()

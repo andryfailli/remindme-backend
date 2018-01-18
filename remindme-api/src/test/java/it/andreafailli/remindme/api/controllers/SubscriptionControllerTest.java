@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,21 +20,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.andreafailli.remindme.Profiles;
+import it.andreafailli.remindme.api.auth.DefaultWebSecurityConfigurerAdapter;
+import it.andreafailli.remindme.auth.WithUserMock;
 import it.andreafailli.remindme.common.models.Subscription;
 import it.andreafailli.remindme.common.services.SubscriptionService;
 import it.andreafailli.remindme.testing.UnitTestCategory;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = SubscriptionController.class)
 @Category(UnitTestCategory.class)
+@WebMvcTest(controllers = {SubscriptionController.class, DefaultWebSecurityConfigurerAdapter.class})
+@ActiveProfiles(Profiles.TEST)
 public class SubscriptionControllerTest {
 
 	@Autowired
+	private WebApplicationContext context;
+	
 	private MockMvc mvc;
 	
 	@MockBean
@@ -52,6 +62,11 @@ public class SubscriptionControllerTest {
     public void setUp(){
         MockitoAnnotations.initMocks(this);
         
+        this.mvc = MockMvcBuilders
+				.webAppContextSetup(this.context)
+				.apply(springSecurity())
+				.build();
+        
         this.subscription = new Subscription();
         this.subscription.setUserId("a");
         
@@ -63,6 +78,7 @@ public class SubscriptionControllerTest {
     }
 	
 	@Test
+	@WithUserMock
 	public void testUpdate() throws Exception {
 		given(subscriptionService.save(any(Subscription.class))).willReturn(this.subscription1);
 		this.mvc.perform(post(SubscriptionController.BASE_URL+"/"+this.subscription1.getId())
@@ -77,6 +93,7 @@ public class SubscriptionControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testUpdateWithoutEntityId() throws Exception {
 		this.mvc.perform(post(SubscriptionController.BASE_URL+"/0")
 					.contentType(MediaType.APPLICATION_JSON)
@@ -88,6 +105,7 @@ public class SubscriptionControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testUpdateWithIdsNotMatching() throws Exception {
 		this.mvc.perform(post(SubscriptionController.BASE_URL+"/"+this.subscription1.getId())
 					.contentType(MediaType.APPLICATION_JSON)
@@ -99,6 +117,7 @@ public class SubscriptionControllerTest {
 	}
 
 	@Test
+	@WithUserMock
 	public void testDelete() throws Exception {
 		this.mvc.perform(delete(SubscriptionController.BASE_URL+"/"+this.subscription1.getId())
 					.accept(MediaType.APPLICATION_JSON)

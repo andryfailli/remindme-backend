@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
+import java.util.concurrent.ExecutionException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -13,19 +15,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.http.ContentType;
+import it.andreafailli.remindme.Profiles;
 import it.andreafailli.remindme.RemindMeApiApplication;
+import it.andreafailli.remindme.api.auth.FirebaseAuthFilter;
+import it.andreafailli.remindme.api.auth.FirebaseIdTokenAuthenticatorMock;
 import it.andreafailli.remindme.common.models.Subscription;
 import it.andreafailli.remindme.common.services.SubscriptionService;
 import it.andreafailli.remindme.testing.IntegrationTestCategory;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RemindMeApiApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @Category(IntegrationTestCategory.class)
+@SpringBootTest(classes = {RemindMeApiApplication.class}, webEnvironment = WebEnvironment.RANDOM_PORT)
+@ActiveProfiles(Profiles.TEST)
 public class SubscriptionControllerIT {
 	
 	@LocalServerPort
@@ -40,17 +47,15 @@ public class SubscriptionControllerIT {
 	private ObjectMapper objectMapper;
 	
 	private Subscription subscription;
-	
-	
+		
 	@Before
-    public void setUp(){
+    public void setUp() throws InterruptedException, ExecutionException{
 		this.url = "http://localhost:"+port;
 		
 		this.subscriptionService.deleteAll();
 		
 		this.subscription = new Subscription("1");
-        this.subscription.setUserId("a");
-        
+        this.subscription.setUserId("a");        
     }
 	
 	@Test
@@ -58,6 +63,7 @@ public class SubscriptionControllerIT {
 		this.subscriptionService.insert(subscription);
 		this.subscription.setUserId("modified");
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.subscription))	
 			.when()
@@ -79,6 +85,7 @@ public class SubscriptionControllerIT {
 		this.subscription.setUserId("modified");
 		this.subscription.setId(null);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.subscription))
 			.when()
@@ -95,6 +102,7 @@ public class SubscriptionControllerIT {
 		String oldValue = this.subscription.getUserId();
 		this.subscription.setUserId("modified");
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.subscription))
 			.when()
@@ -109,6 +117,7 @@ public class SubscriptionControllerIT {
 	public void testDelete() throws Exception {
 		this.subscriptionService.insert(subscription);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.delete(this.url + SubscriptionController.BASE_URL + "/" + this.subscription.getId())
 			.then()
