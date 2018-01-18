@@ -28,6 +28,6 @@ public class RemindMeApiApplication {
 		  .setCredentials(GoogleCredentials.fromStream(serviceAccount))
 		  .setDatabaseUrl("https://glass-crossing.firebaseio.com")
 		  .build();
-		if (FirebaseApp.getApps().size() == 0) FirebaseApp.initializeApp(options);
+		if (FirebaseApp.getApps().isEmpty()) FirebaseApp.initializeApp(options);
 	}
 }
