@@ -11,8 +11,10 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import it.andreafailli.remindme.Profiles;
 import it.andreafailli.remindme.RemindMeCommonTestApplication;
 import it.andreafailli.remindme.common.models.Subscription;
 import it.andreafailli.remindme.common.models.User;
@@ -20,19 +22,20 @@ import it.andreafailli.remindme.common.repositories.ISubscriptionRepository;
 import it.andreafailli.remindme.testing.IntegrationTestCategory;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RemindMeCommonTestApplication.class)
 @Category(IntegrationTestCategory.class)
+@SpringBootTest(classes = RemindMeCommonTestApplication.class)
+@ActiveProfiles(Profiles.TEST)
 public class SubscriptionServiceIT {
 	
 	@Autowired
-    SubscriptionService entityService;
+    private SubscriptionService entityService;
 
 	@Autowired
-    ISubscriptionRepository entityRepository;
+	private ISubscriptionRepository entityRepository;
     
-	Subscription entity1;
+	private Subscription entity1;
 
-	Subscription entity2;
+	private Subscription entity2;
 
     @Before
     public void setUp(){

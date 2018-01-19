@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,22 +30,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.andreafailli.remindme.Profiles;
+import it.andreafailli.remindme.api.auth.DefaultWebSecurityConfigurerAdapter;
+import it.andreafailli.remindme.auth.WithUserMock;
 import it.andreafailli.remindme.common.models.Reminder;
 import it.andreafailli.remindme.common.models.User;
 import it.andreafailli.remindme.common.services.ReminderService;
 import it.andreafailli.remindme.testing.UnitTestCategory;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = ReminderController.class)
 @Category(UnitTestCategory.class)
+@WebMvcTest(controllers = {ReminderController.class, DefaultWebSecurityConfigurerAdapter.class})
+@ActiveProfiles(Profiles.TEST)
 public class ReminderControllerTest {
 
 	@Autowired
+	private WebApplicationContext context;
+	
 	private MockMvc mvc;
 	
 	@MockBean
@@ -62,6 +72,11 @@ public class ReminderControllerTest {
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
+        
+        this.mvc = MockMvcBuilders
+				.webAppContextSetup(this.context)
+				.apply(springSecurity())
+				.build();
         
         User u = new User("1");
         
@@ -84,6 +99,7 @@ public class ReminderControllerTest {
     }
 
 	@Test
+	@WithUserMock
 	public void testList() throws Exception {
 		given(reminderService.list()).willReturn(Arrays.asList(this.reminder1, this.reminder2));
 		this.mvc.perform(get(ReminderController.BASE_URL).accept(MediaType.APPLICATION_JSON))
@@ -103,6 +119,7 @@ public class ReminderControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testListByArchivedTrue() throws Exception {
 		given(reminderService.list(true)).willReturn(Arrays.asList(this.reminder1));
 		this.mvc.perform(get(ReminderController.BASE_URL + "?archived=true").accept(MediaType.APPLICATION_JSON))
@@ -116,6 +133,7 @@ public class ReminderControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testListByArchivedFalse() throws Exception {
 		given(reminderService.list(false)).willReturn(Arrays.asList(this.reminder2));
 		this.mvc.perform(get(ReminderController.BASE_URL + "?archived=false").accept(MediaType.APPLICATION_JSON))
@@ -129,6 +147,7 @@ public class ReminderControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testListEmpty() throws Exception {
 		given(reminderService.list()).willReturn(new ArrayList<Reminder>());
 		this.mvc.perform(get(ReminderController.BASE_URL).accept(MediaType.APPLICATION_JSON))
@@ -138,6 +157,7 @@ public class ReminderControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testGet() throws Exception {
 		given(reminderService.get(this.reminder1.getId())).willReturn(this.reminder1);
 		this.mvc.perform(get(ReminderController.BASE_URL+"/"+this.reminder1.getId()).accept(MediaType.APPLICATION_JSON))
@@ -151,6 +171,7 @@ public class ReminderControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testGetNotFound() throws Exception {
 		given(reminderService.get(this.reminder1.getId())).willReturn(null);
 		this.mvc.perform(get(ReminderController.BASE_URL+"/"+this.reminder1.getId()).accept(MediaType.APPLICATION_JSON))
@@ -159,6 +180,7 @@ public class ReminderControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testInsert() throws Exception {
 		given(reminderService.insert(any(Reminder.class))).willAnswer(new Answer<Reminder>() {
 			@Override
@@ -182,6 +204,7 @@ public class ReminderControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testInsertWithId() throws Exception {
 		this.mvc.perform(put(ReminderController.BASE_URL)
 					.contentType(MediaType.APPLICATION_JSON)
@@ -193,6 +216,7 @@ public class ReminderControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testUpdate() throws Exception {
 		given(reminderService.update(any(Reminder.class))).willReturn(this.reminder1);
 		this.mvc.perform(post(ReminderController.BASE_URL+"/"+this.reminder1.getId())
@@ -210,6 +234,7 @@ public class ReminderControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testUpdateWithoutEntityId() throws Exception {
 		this.mvc.perform(post(ReminderController.BASE_URL+"/0")
 					.contentType(MediaType.APPLICATION_JSON)
@@ -221,6 +246,7 @@ public class ReminderControllerTest {
 	}
 	
 	@Test
+	@WithUserMock
 	public void testUpdateWithIdsNotMatching() throws Exception {
 		this.mvc.perform(post(ReminderController.BASE_URL+"/"+this.reminder1.getId())
 					.contentType(MediaType.APPLICATION_JSON)
@@ -232,6 +258,7 @@ public class ReminderControllerTest {
 	}
 
 	@Test
+	@WithUserMock
 	public void testDelete() throws Exception {
 		this.mvc.perform(delete(ReminderController.BASE_URL+"/"+this.reminder1.getId())
 					.accept(MediaType.APPLICATION_JSON)

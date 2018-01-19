@@ -17,12 +17,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.http.ContentType;
+import it.andreafailli.remindme.Profiles;
 import it.andreafailli.remindme.RemindMeApiApplication;
+import it.andreafailli.remindme.api.auth.FirebaseAuthFilter;
+import it.andreafailli.remindme.api.auth.FirebaseIdTokenAuthenticatorMock;
 import it.andreafailli.remindme.common.models.Reminder;
 import it.andreafailli.remindme.common.models.User;
 import it.andreafailli.remindme.common.services.ReminderService;
@@ -30,8 +34,9 @@ import it.andreafailli.remindme.common.services.UserService;
 import it.andreafailli.remindme.testing.IntegrationTestCategory;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RemindMeApiApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @Category(IntegrationTestCategory.class)
+@SpringBootTest(classes = RemindMeApiApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@ActiveProfiles(Profiles.TEST)
 public class ReminderControllerIT {
 	
 	@LocalServerPort
@@ -88,6 +93,7 @@ public class ReminderControllerIT {
 		this.reminderService.insert(this.reminder1);
         this.reminderService.insert(this.reminder2);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.get(this.url + ReminderController.BASE_URL)
 			.then()
@@ -110,6 +116,7 @@ public class ReminderControllerIT {
 	@Test
 	public void testListEmpty() throws Exception {
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.get(this.url + ReminderController.BASE_URL)
 			.then()
@@ -124,6 +131,7 @@ public class ReminderControllerIT {
 		this.reminderService.insert(this.reminder1);
         this.reminderService.insert(this.reminder2);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.get(this.url + ReminderController.BASE_URL + "?archived=true")
 			.then()
@@ -143,6 +151,7 @@ public class ReminderControllerIT {
 		this.reminderService.insert(this.reminder1);
         this.reminderService.insert(this.reminder2);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.get(this.url + ReminderController.BASE_URL + "?archived=false")
 			.then()
@@ -161,6 +170,7 @@ public class ReminderControllerIT {
 	public void testGet() throws Exception {
 		this.reminderService.insert(this.reminder1);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.get(this.url + ReminderController.BASE_URL + "/" + this.reminder1.getId())
 			.then()
@@ -177,6 +187,7 @@ public class ReminderControllerIT {
 	@Test
 	public void testGetNotFound() throws Exception {
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.get(this.url + ReminderController.BASE_URL + "/0")
 			.then()
@@ -187,6 +198,7 @@ public class ReminderControllerIT {
 	@Test
 	public void testInsert() throws Exception {
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.reminder))
 			.when()
@@ -206,6 +218,7 @@ public class ReminderControllerIT {
 	public void testInsertWithId() throws Exception {
 		this.reminder.setId("0");
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.reminder))
 			.when()
@@ -220,6 +233,7 @@ public class ReminderControllerIT {
 		this.reminderService.insert(reminder);
 		this.reminder.setTitle("modified");
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.reminder))
 			.when()
@@ -244,6 +258,7 @@ public class ReminderControllerIT {
 		this.reminder.setTitle("modified");
 		this.reminder.setId(null);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.reminder))
 			.when()
@@ -260,6 +275,7 @@ public class ReminderControllerIT {
 		String oldValue = this.reminder.getTitle();
 		this.reminder.setTitle("modified");
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.contentType(ContentType.JSON)
 			.body(this.objectMapper.writeValueAsString(this.reminder))
 			.when()
@@ -274,6 +290,7 @@ public class ReminderControllerIT {
 	public void testDelete() throws Exception {
 		this.reminderService.insert(reminder);
 		given()
+			.header(FirebaseAuthFilter.HEADER_NAME, FirebaseIdTokenAuthenticatorMock.ID_TOKEN_MOCK)
 			.when()
 			.delete(this.url + ReminderController.BASE_URL + "/" + this.reminder.getId())
 			.then()

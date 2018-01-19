@@ -7,6 +7,7 @@ import org.slf4j.ext.XLoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +41,16 @@ public class UserController {
 		
 		LOGGER.exit(users);
 		return users;
+	}
+	
+	@RequestMapping(path = "/me", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public User me(Authentication authentication) {
+		LOGGER.entry(authentication);
+		
+		User user = this.userService.get(authentication.getName());
+		
+		LOGGER.exit(user);
+		return user;
 	}
 	
 	@RequestMapping(path = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

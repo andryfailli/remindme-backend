@@ -22,14 +22,14 @@ import it.andreafailli.remindme.testing.UnitTestCategory;
 public class UserServiceTest {
 	
 	@InjectMocks
-    UserService entityService;
+	private UserService entityService;
 
     @Mock
-    IUserRepository entityRepository;
+    private IUserRepository entityRepository;
     
-    User entity1;
+    private User entity1;
     
-    User entity2;
+    private User entity2;
 
     @Before
     public void setUp(){

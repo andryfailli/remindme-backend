@@ -11,27 +11,30 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import it.andreafailli.remindme.Profiles;
 import it.andreafailli.remindme.RemindMeCommonTestApplication;
 import it.andreafailli.remindme.common.models.User;
 import it.andreafailli.remindme.common.repositories.IUserRepository;
 import it.andreafailli.remindme.testing.IntegrationTestCategory;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = RemindMeCommonTestApplication.class)
 @Category(IntegrationTestCategory.class)
+@SpringBootTest(classes = RemindMeCommonTestApplication.class)
+@ActiveProfiles(Profiles.TEST)
 public class UserServiceIT {
 	
 	@Autowired
-    UserService entityService;
+	private UserService entityService;
 
 	@Autowired
-    IUserRepository entityRepository;
+	private IUserRepository entityRepository;
     
-    User entity1;
+	private User entity1;
 
-    User entity2;
+	private User entity2;
 
     @Before
     public void setUp(){

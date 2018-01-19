@@ -23,14 +23,14 @@ import it.andreafailli.remindme.testing.UnitTestCategory;
 public class ReminderServiceTest {
 	
 	@InjectMocks
-    ReminderService entityService;
+	private ReminderService entityService;
 
     @Mock
-    IReminderRepository entityRepository;
+    private IReminderRepository entityRepository;
     
-    Reminder entity1;
+    private Reminder entity1;
 
-    Reminder entity2;
+    private Reminder entity2;
 
     @Before
     public void setUp(){
