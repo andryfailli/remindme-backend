@@ -19,11 +19,10 @@ public class FirebaseAuthFilter extends OncePerRequestFilter {
 	public static final String HEADER_NAME = "X-Authorization-Firebase";
 	
 	@Autowired(required = false)
-	public IFirebaseIdTokenAuthenticator firebaseIdTokenAuthenticator;
+	private IFirebaseIdTokenAuthenticator firebaseIdTokenAuthenticator;
 	
 	@Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         String idToken = request.getHeader(FirebaseAuthFilter.HEADER_NAME);
         if (idToken == null || "".equals(idToken)) {
             filterChain.doFilter(request, response);

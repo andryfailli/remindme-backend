@@ -14,9 +14,19 @@ import it.andreafailli.remindme.Profiles;
 @Profile("!"+Profiles.TEST)
 public class FirebaseIdTokenAuthenticator implements IFirebaseIdTokenAuthenticator {
 
+	private FirebaseAuth firebaseAuth;
+	
+	public FirebaseIdTokenAuthenticator() { 
+		this(FirebaseAuth.getInstance());
+	}
+	
+	public FirebaseIdTokenAuthenticator(FirebaseAuth firebaseAuth) {
+		this.firebaseAuth = firebaseAuth;
+	}
+	
 	@Override
 	public FirebaseAuthenticationToken authenticate(String idToken) throws InterruptedException, ExecutionException {
-		FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdTokenAsync(idToken).get();
+		FirebaseToken decodedToken = this.firebaseAuth.verifyIdTokenAsync(idToken).get();
         return new FirebaseAuthenticationToken(decodedToken.getUid(), decodedToken);
 	}
 
