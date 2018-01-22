@@ -10,23 +10,23 @@ import it.andreafailli.remindme.common.repositories.ISubscriptionRepository;
 @Service
 public class SubscriptionService implements IEntityService<Subscription> {
 	
-	private ISubscriptionRepository userRepository;
+	private ISubscriptionRepository subscriptionRepository;
 	
 	@Autowired
 	public SubscriptionService(ISubscriptionRepository subscriptionRepository) {
-		this.userRepository = subscriptionRepository;
+		this.subscriptionRepository = subscriptionRepository;
 	}
 
 	public Iterable<Subscription> list() {
-		return this.userRepository.findAll();
+		return this.subscriptionRepository.findAll();
 	}
 	
 	public Iterable<Subscription> list(User user) {
-		return this.userRepository.findByUserId(user.getId());
+		return this.subscriptionRepository.findByUserId(user.getId());
 	}
 
 	public Subscription get(String id) {
-		return this.userRepository.findOne(id);
+		return this.subscriptionRepository.findOne(id);
 	}
 
 	public Subscription insert(Subscription subscription) {
@@ -38,15 +38,15 @@ public class SubscriptionService implements IEntityService<Subscription> {
 	}
 	
 	public Subscription save(Subscription subscription) {
-		return this.userRepository.save(subscription);
+		return this.subscriptionRepository.save(subscription);
 	}
 	
 	public void delete(String id) {
-		this.userRepository.delete(id);
+		this.subscriptionRepository.delete(id);
 	}
 
 	public void deleteAll() {
-		this.userRepository.deleteAll();
+		this.subscriptionRepository.deleteAll();
 	}
 	
 }
