@@ -61,7 +61,7 @@ public static final String BASE_URL = "/";
 			Notification.Data notificationData = new Notification.Data();
 			notification.setTo(subscription.getId());
 			notification.setData(notificationData);
-			notificationData.setClickAction(this.remindmeFrontendUrl);
+			notificationData.setClickAction(this.remindmeFrontendUrl + "/inbox;reminder=" + reminder.getId());
 			notificationData.setTitle(reminder.getTitle());
 			
 			this.notificationService.send(notification);
