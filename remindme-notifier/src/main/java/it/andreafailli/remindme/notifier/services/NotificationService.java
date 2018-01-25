@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -41,10 +42,10 @@ public class NotificationService {
 		headers.add("Authorization", "key="+this.firebaseConfigServerKey);
 		
 		try {
-			restTemplate.postForEntity(this.firebaseFcmServerUrl, new HttpEntity<Notification>(notification, headers), String.class);
-			LOGGER.info("Notification sent.");
+			ResponseEntity<String> response = restTemplate.postForEntity(this.firebaseFcmServerUrl, new HttpEntity<Notification>(notification, headers), String.class);
+			LOGGER.debug("Sent notification to {}. Response from server: {} {}", notification.getTo(), response.getStatusCode(), response.getBody());
 		} catch (HttpClientErrorException exception) {
-			LOGGER.error("An error occurred while sending notification: "+exception.toString());
+			LOGGER.error("An error occurred while sending notification: {}", exception);
 		}
 		
 		LOGGER.exit();
