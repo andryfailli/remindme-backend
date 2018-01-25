@@ -43,10 +43,14 @@ public static final String BASE_URL = "/";
 		
 		LocalDateTime now = LocalDateTime.now();
 		
+		int count = 0;
 		Iterable<Reminder> reminders = this.reminderService.list(now);
 		for (Reminder reminder : reminders) {
 			this.sendNotification(reminder);
+			count++;
 		}
+		
+		LOGGER.info("Processed {} reminders", count);
 		
 		ResponseEntity<Void> response = ResponseEntity.ok().build();
 		
