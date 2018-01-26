@@ -14,10 +14,13 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 public class FirebaseWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-    private FirebaseAuthFilter firebaseAuthFilter;
+	private FirebaseAuthFilter firebaseAuthFilter;
 	
 	@Autowired
     private FirebaseAuthenticationProvider firebaseAuthenticationProvider;
+	
+	@Autowired
+	private DefaultWebSecurityConfigurerAdapter defaultWebSecurityConfigurerAdapter;
 
 	@Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -27,7 +30,7 @@ public class FirebaseWebSecurityConfigurerAdapter extends WebSecurityConfigurerA
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterAfter(firebaseAuthFilter, SecurityContextPersistenceFilter.class);
-        DefaultWebSecurityConfigurerAdapter.applyDefaultConfiguration(http);
+        this.defaultWebSecurityConfigurerAdapter.configure(http);
         	
     }
 }

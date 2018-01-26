@@ -13,10 +13,6 @@ public class DefaultWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
 	
 	@Override
     public void configure(HttpSecurity http) throws Exception {
-		DefaultWebSecurityConfigurerAdapter.applyDefaultConfiguration(http);
-    }
-	
-	public static void applyDefaultConfiguration(HttpSecurity http) throws Exception {
 		http
     	.csrf().disable()
     	.sessionManagement().disable()
@@ -31,5 +27,5 @@ public class DefaultWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
     	.and()
             .exceptionHandling()
             .authenticationEntryPoint(new Http401AuthenticationEntryPoint(FirebaseAuthFilter.HEADER_NAME));
-	}
+    }
 }

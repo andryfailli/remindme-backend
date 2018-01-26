@@ -5,7 +5,5 @@ public class Profiles {
     public static final String TEST = "TEST";
     public static final String PRODUCTION = "PRODUCTION";
     
-	private Profiles() {
-		throw new IllegalStateException("Utility class");
-	}
+	private Profiles() {}
 }

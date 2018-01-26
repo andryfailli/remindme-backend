@@ -43,7 +43,6 @@ public class FirebaseAuthFilterTest {
 	@Before
     public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		//this.filter = new FirebaseAuthFilter(this.firebaseIdTokenAuthenticator);
     }
 	
 	@Test
