@@ -6,8 +6,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Collection;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -16,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 
 import com.google.firebase.auth.FirebaseToken;
 
@@ -30,20 +27,6 @@ import it.andreafailli.remindme.testing.UnitTestCategory;
 public class FirebaseAuthenticationProviderTest {
 	
 	private static final String USER_ID_MOCK = "USER_ID_MOCK";
-	
-	private static class FirebaseAuthenticationTokenExtension extends FirebaseAuthenticationToken {
-
-		private static final long serialVersionUID = 5223876711110721487L;
-
-		public FirebaseAuthenticationTokenExtension(String principal, FirebaseToken credentials) {
-			super(principal, credentials);
-		}
-		
-		public FirebaseAuthenticationTokenExtension(String principal, FirebaseToken credentials, Collection<? extends GrantedAuthority> authorities) {
-			super(principal, credentials, authorities);
-		}
-		
-	}
 
 	@InjectMocks
 	private FirebaseAuthenticationProvider firebaseAuthenticationProvider;
@@ -75,7 +58,6 @@ public class FirebaseAuthenticationProviderTest {
     @Test
 	public void testSupportsTrue() {
 		assertThat(this.firebaseAuthenticationProvider.supports(FirebaseAuthenticationToken.class)).isTrue();
-		assertThat(this.firebaseAuthenticationProvider.supports(FirebaseAuthenticationTokenExtension.class)).isTrue();
 	}
     
     @Test
