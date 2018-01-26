@@ -51,7 +51,8 @@ public class FirebaseIdTokenAuthenticatorTest {
 	
 	@Test
 	public void testAuthenticate() throws Exception {
-		when(this.firebaseAuth.verifyIdTokenAsync(this.ID_TOKEN_MOCK)).thenReturn(new ApiFuture<FirebaseToken>() {
+		
+		ApiFuture<FirebaseToken> apiFuture = new ApiFuture<FirebaseToken>() {
 			
 			@Override
 			public boolean isDone() {
@@ -65,7 +66,7 @@ public class FirebaseIdTokenAuthenticatorTest {
 			
 			@Override
 			public FirebaseToken get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-				return firebaseToken;
+				return this.get();
 			}
 			
 			@Override
@@ -82,8 +83,18 @@ public class FirebaseIdTokenAuthenticatorTest {
 			public void addListener(Runnable arg0, Executor arg1) {
 				
 			}
-		});
+		};
+		
+		when(this.firebaseAuth.verifyIdTokenAsync(this.ID_TOKEN_MOCK)).thenReturn(apiFuture);
+		assertThat(apiFuture.isDone()).isTrue();
+		assertThat(apiFuture.get(0, null)).isEqualTo(this.firebaseToken);
+		assertThat(apiFuture.isCancelled()).isFalse();
+		assertThat(apiFuture.cancel(true)).isFalse();
+		assertThat(apiFuture.cancel(false)).isFalse();
+		apiFuture.addListener(null, null);
+		
 		FirebaseAuthenticationToken firebaseAuthenticationToken = this.firebaseIdTokenAuthenticator.authenticate(this.ID_TOKEN_MOCK);
+		
 		verify(this.firebaseAuth).verifyIdTokenAsync(this.ID_TOKEN_MOCK);
 		assertThat(firebaseAuthenticationToken.getPrincipal()).isEqualTo(this.firebaseToken.getUid());
 		assertThat(firebaseAuthenticationToken.getCredentials()).isEqualTo(this.firebaseToken);
