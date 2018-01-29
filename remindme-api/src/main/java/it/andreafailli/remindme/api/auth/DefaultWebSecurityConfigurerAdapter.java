@@ -23,7 +23,7 @@ public class DefaultWebSecurityConfigurerAdapter extends WebSecurityConfigurerAd
     	
     	.authorizeRequests()
         	.antMatchers(HttpMethod.OPTIONS).permitAll()
-        	.anyRequest().authenticated()
+        	.antMatchers("/api/*").authenticated()
     	.and()
             .exceptionHandling()
             .authenticationEntryPoint(new Http401AuthenticationEntryPoint(FirebaseAuthFilter.HEADER_NAME));
