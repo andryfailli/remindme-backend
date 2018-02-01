@@ -23,7 +23,7 @@ jdk:
   - oraclejdk8
   
 before_script:
-- echo $REMINDME_FIREBASE_SERVER_KEY_JSON > ./remindme-api/src/main/resources/firebase-server-key.json
+  - echo $REMINDME_FIREBASE_SERVER_KEY_JSON_BASE64 | base64 -d  > ./remindme-api/src/main/resources/firebase-server-key.json
 
 script:
   - mvn -D"firebase.config.serverKey"="$REMINDME_FIREBASE_SERVER_KEY" clean jacoco:prepare-agent test org.pitest:pitest-maven:mutationCoverage jacoco:prepare-agent-integration verify package jacoco:report jacoco:report-integration sonar:sonar -Dsonar.pitest.mode=reuseReport coveralls:report -DrepoToken=$COVERALLS_TOKEN
