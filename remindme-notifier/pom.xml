@@ -83,6 +83,7 @@
 				<configuration>
 				    <excludes>
 				        <exclude>it/andreafailli/remindme/notifier/models/**/*</exclude>
+				        <exclude>it/andreafailli/remindme/RemindMeNotifierApplication.class</exclude>
 				    </excludes>
 				</configuration>
 			</plugin>

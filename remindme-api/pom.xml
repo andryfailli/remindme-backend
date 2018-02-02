@@ -128,6 +128,11 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+				    <excludes>
+				        <exclude>it/andreafailli/remindme/RemindMeApiApplication.class</exclude>
+				    </excludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.eluder.coveralls</groupId>
