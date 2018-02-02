@@ -31,6 +31,5 @@ public class FirebaseWebSecurityConfigurerAdapter extends WebSecurityConfigurerA
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterAfter(firebaseAuthFilter, SecurityContextPersistenceFilter.class);
         this.defaultWebSecurityConfigurerAdapter.configure(http);
-        	
     }
 }

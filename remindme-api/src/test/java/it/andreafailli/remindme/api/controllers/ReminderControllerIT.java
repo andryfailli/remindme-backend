@@ -26,7 +26,7 @@ import io.restassured.http.ContentType;
 import it.andreafailli.remindme.Profiles;
 import it.andreafailli.remindme.RemindMeApiApplication;
 import it.andreafailli.remindme.api.auth.FirebaseAuthFilter;
-import it.andreafailli.remindme.api.auth.FirebaseIdTokenAuthenticatorMock;
+import it.andreafailli.remindme.auth.FirebaseIdTokenAuthenticatorMock;
 import it.andreafailli.remindme.common.models.Reminder;
 import it.andreafailli.remindme.common.models.User;
 import it.andreafailli.remindme.common.services.ReminderService;

@@ -122,6 +122,12 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+				    <excludes>
+				        <exclude>it/andreafailli/remindme/Profiles.class</exclude>
+				        <exclude>it/andreafailli/remindme/common/models/**/*</exclude>
+				    </excludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.eluder.coveralls</groupId>
