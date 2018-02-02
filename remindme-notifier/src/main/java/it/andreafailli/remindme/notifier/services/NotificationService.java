@@ -2,6 +2,7 @@ package it.andreafailli.remindme.notifier.services;
 
 import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,7 @@ public class NotificationService {
 	
 	private static final XLogger LOGGER = XLoggerFactory.getXLogger(NotificationService.class);
 	
+	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Value("${firebase.fcmServerUrl}")
@@ -25,15 +27,7 @@ public class NotificationService {
 	
 	@Value("${firebase.config.serverKey}")
 	private String firebaseConfigServerKey;
-
-	public NotificationService(RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
-	}
-	
-	public NotificationService() {
-		this(new RestTemplate());
-	}
-	
+		
 	public void send(Notification notification) {
 		LOGGER.entry(notification);
 
