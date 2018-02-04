@@ -5,7 +5,7 @@
 
 	<groupId>it.andreafailli.remindme</groupId>
 	<artifactId>remindme-common</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>remindme-common</name>
