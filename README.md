@@ -1,4 +1,4 @@
-# RemindMe! Bakckend
+# RemindMe! Backend
 Containerized backend for RemindMe! built with Spring Boot.
 
 [![Build Status](https://travis-ci.org/andryfailli/remindme-backend.svg?branch=master)](https://travis-ci.org/andryfailli/remindme-backend)

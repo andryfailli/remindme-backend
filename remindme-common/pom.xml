@@ -5,7 +5,7 @@
 
 	<groupId>it.andreafailli.remindme</groupId>
 	<artifactId>remindme-common</artifactId>
-	<version>0.0.1-RELEASE</version>
+	<version>0.0.2-RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>remindme-common</name>
@@ -122,6 +122,12 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+				    <excludes>
+				        <exclude>it/andreafailli/remindme/Profiles.class</exclude>
+				        <exclude>it/andreafailli/remindme/common/models/**/*</exclude>
+				    </excludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.eluder.coveralls</groupId>

@@ -2,6 +2,7 @@ package it.andreafailli.remindme.api.auth;
 
 import java.util.concurrent.ExecutionException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +15,8 @@ import it.andreafailli.remindme.Profiles;
 @Profile("!"+Profiles.TEST)
 public class FirebaseIdTokenAuthenticator implements IFirebaseIdTokenAuthenticator {
 
+	@Autowired
 	private FirebaseAuth firebaseAuth;
-	
-	public FirebaseIdTokenAuthenticator() { 
-		this(FirebaseAuth.getInstance());
-	}
-	
-	public FirebaseIdTokenAuthenticator(FirebaseAuth firebaseAuth) {
-		this.firebaseAuth = firebaseAuth;
-	}
 	
 	@Override
 	public FirebaseAuthenticationToken authenticate(String idToken) throws InterruptedException, ExecutionException {

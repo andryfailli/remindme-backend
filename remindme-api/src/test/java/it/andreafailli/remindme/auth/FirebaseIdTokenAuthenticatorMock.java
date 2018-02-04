@@ -1,4 +1,4 @@
-package it.andreafailli.remindme.api.auth;
+package it.andreafailli.remindme.auth;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -9,6 +9,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
 import it.andreafailli.remindme.Profiles;
+import it.andreafailli.remindme.api.auth.FirebaseAuthenticationToken;
+import it.andreafailli.remindme.api.auth.IFirebaseIdTokenAuthenticator;
 
 @Service
 @Profile(Profiles.TEST)

@@ -12,6 +12,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.collect.Lists;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 import it.andreafailli.remindme.api.auth.FirebaseAuthFilter;
 import springfox.documentation.builders.PathSelectors;
@@ -30,20 +31,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class RemindMeApiApplication {
 
-	public static void main(String[] args) throws IOException {
-		initFirebase();
+	public static void main(String[] args) {
 		SpringApplication.run(RemindMeApiApplication.class, args);
 	}
-	
-	public static void initFirebase() throws IOException {
-    	InputStream inputStream = RemindMeApiApplication.class.getClassLoader().getResourceAsStream("firebase-server-key.json");
-		FirebaseOptions options = new FirebaseOptions.Builder()
-		  .setCredentials(GoogleCredentials.fromStream(inputStream))
-		  .setDatabaseUrl("https://glass-crossing.firebaseio.com")
-		  .build();
-		if (FirebaseApp.getApps().isEmpty()) FirebaseApp.initializeApp(options);
- 
-    }
 	
 	@Bean
     public Docket swaggerConfiguration() { 
@@ -58,5 +48,22 @@ public class RemindMeApiApplication {
     	        .build()))
           .securitySchemes(Lists.newArrayList(new ApiKey(FirebaseAuthFilter.HEADER_NAME, FirebaseAuthFilter.HEADER_NAME, ApiKeyVehicle.HEADER.getValue())));
     }
+	
+	@Bean
+	public FirebaseAuth firebaseAuth() {
+		if (FirebaseApp.getApps().isEmpty()) {
+			try {
+				InputStream inputStream = RemindMeApiApplication.class.getClassLoader().getResourceAsStream("firebase-server-key.json");
+				FirebaseOptions options = new FirebaseOptions.Builder()
+					  .setCredentials(GoogleCredentials.fromStream(inputStream))
+					  .setDatabaseUrl("https://glass-crossing.firebaseio.com")
+					  .build();
+				FirebaseApp.initializeApp(options);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return FirebaseAuth.getInstance();
+	}
 
 }

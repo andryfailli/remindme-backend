@@ -40,7 +40,6 @@ public class FirebaseIdTokenAuthenticatorTest {
 	@Before
     public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		this.firebaseIdTokenAuthenticator = new FirebaseIdTokenAuthenticator(this.firebaseAuth);
 		this.firebaseToken = new FirebaseTokenBuilder()
 				.uuid("1")
 				.email("user@example.com")

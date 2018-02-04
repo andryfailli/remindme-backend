@@ -5,7 +5,7 @@
 
 	<groupId>it.andreafailli.remindme</groupId>
 	<artifactId>remindme-notifier</artifactId>
-	<version>0.0.1-RELEASE</version>
+	<version>0.0.2-RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>remindme-common</name>
@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>it.andreafailli.remindme</groupId>
 			<artifactId>remindme-common</artifactId>
-			<version>0.0.1-RELEASE</version>
+			<version>0.0.2-RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -80,6 +80,12 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+				    <excludes>
+				        <exclude>it/andreafailli/remindme/notifier/models/**/*</exclude>
+				        <exclude>it/andreafailli/remindme/RemindMeNotifierApplication.class</exclude>
+				    </excludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.pitest</groupId>
